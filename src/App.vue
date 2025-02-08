@@ -1,11 +1,15 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
-
 <template>
   <RouterView />
 </template>
+<script setup lang="ts">
+import { RouterView } from "vue-router";
+import api from "@/services/httpService";
+
+api.todos.get().then((res) => {
+  console.log(res.data);
+});
+console.log(api);
+</script>
 
 <style scoped>
 header {

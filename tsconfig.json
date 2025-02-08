@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "types": ["node"]
+  },
   "files": [],
   "references": [
     {
@@ -10,5 +13,6 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  "include": ["src", "vite-env.d.ts"]
 }
