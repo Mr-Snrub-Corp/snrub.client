@@ -34,8 +34,8 @@ api["auth"] = {
       body: JSON.stringify(data),
       headers,
     }).then((res) => res.json()),
-  register: <T>(data: T) =>
-    fetch(`${baseUrl}/auth/register`, {
+  signup: <T>(data: T) =>
+    fetch(`${baseUrl}/auth/signup`, {
       method: "POST",
       body: JSON.stringify(data),
       headers,
