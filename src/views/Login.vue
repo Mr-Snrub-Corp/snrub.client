@@ -81,9 +81,13 @@
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
 import InputText from "primevue/inputtext";
-import api from "@/services/httpService";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 import { ref } from "vue";
+
+const router = useRouter();
+const authStore = useAuthStore();
 
 const email = ref("");
 const password = ref("");
@@ -91,7 +95,7 @@ const password = ref("");
 function login() {
   console.log("login");
 
-  api.auth
+  authStore
     .login({
       email: email.value,
       password: password.value,
@@ -99,6 +103,7 @@ function login() {
     .then((res: any) => {
       // should use a more specific type for the API response instead of any
       console.log(res.data);
+      router.push({ name: "dashboardIndex" });
     });
 }
 
