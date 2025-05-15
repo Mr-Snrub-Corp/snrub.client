@@ -44,12 +44,24 @@ export const useAuthStore = defineStore(
       }
     }
 
+    async function reset({ email }: { email: string }) {
+      try {
+        const response = await api.auth.reset({ email });
+        const data = response as AuthResponse;
+
+        return data;
+      } catch (error) {
+        console.error("Reset failed:", error);
+        throw error;
+      }
+    }
+
     function logout() {
       setUser(null);
       setToken(null);
     }
 
-    return { user, token, setUser, setToken, login, logout };
+    return { user, token, setUser, setToken, login, logout, reset };
   },
   {
     persist: {

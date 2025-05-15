@@ -15,19 +15,11 @@
           />
         </svg>
         <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">
-          Welcome Back
+          Forgot Password
         </div>
         <div class="flex items-center">
           <span class="text-surface-600 dark:text-surface-200 font-medium mr-1"
-            >Don't have an account?</span
-          >
-          <Button
-            as="router-link"
-            to="/signup"
-            variant="text"
-            severity="secondary"
-            class="font-medium inline-flex items-center -ml-2"
-            >Create today!</Button
+            >No worries, we'll send you restore instructions</span
           >
         </div>
       </div>
@@ -43,36 +35,21 @@
           class="w-full mb-4 p-4"
         />
 
-        <label for="password2" class="block text-surface-900 dark:text-surface-0 font-medium mb-2"
-          >Password</label
-        >
-        <InputText
-          id="password2"
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          class="w-full mb-4 p-4"
-        />
-
-        <div class="flex items-center justify-between mb-12">
-          <div class="flex items-center">
-            <Checkbox id="rememberme2" v-model="checked2" :binary="true" class="mr-2" />
-            <label for="rememberme2">Remember me</label>
-          </div>
+        <div class="flex items-center justify-end mb-12">
           <Button
             class="font-medium no-underline ml-2 text-primary text-right"
-            label="Forgot password?"
+            label="Back to Login"
             severity="secondary"
             variant="text"
             as="router-link"
-            to="/forgot"
+            to="/login"
           >
           </Button>
         </div>
 
         <Button
-          @click="login"
-          label="Sign in"
+          @click="handleReset"
+          label="Reset Password"
           severity="secondary"
           icon="pi pi-user"
           class="w-full p-4"
@@ -86,7 +63,6 @@
 </template>
 <script setup lang="ts">
 import Button from "primevue/button";
-import Checkbox from "primevue/checkbox";
 import InputText from "primevue/inputtext";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
@@ -97,20 +73,18 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const email = ref("");
-const password = ref("");
 
-function login() {
-  console.log("login");
+function handleReset() {
+  console.log("reset");
 
   authStore
-    .login({
+    .reset({
       email: email.value,
-      password: password.value,
     })
     .then((res: any) => {
       // should use a more specific type for the API response instead of any
       console.log(res.data);
-      router.push({ name: "dashboardIndex" });
+      //   router.push({ name: "dashboardIndex" });
     });
 }
 

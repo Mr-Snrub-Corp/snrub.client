@@ -62,3 +62,8 @@ npm run test:e2e -- --debug
 ```sh
 npm run lint
 ```
+
+## Next dev steps
+
+// need to modify the httpService.ts to properly handle HTTP error status codes.
+// setup some error interceptor
