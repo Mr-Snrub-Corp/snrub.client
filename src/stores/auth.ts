@@ -46,7 +46,7 @@ export const useAuthStore = defineStore(
 
     async function reset({ email }: { email: string }) {
       try {
-        const response = await api.auth.reset({ email });
+        const response = await api.auth.requestPasswordReset({ email });
         const data = response as AuthResponse;
 
         return data;
@@ -56,12 +56,22 @@ export const useAuthStore = defineStore(
       }
     }
 
+    async function resetPassword({ token, new_password }: { token: string; new_password: string }) {
+      try {
+        const response = await api.auth.resetPassword({ token, new_password });
+        return response;
+      } catch (error) {
+        console.error("Password reset failed:", error);
+        throw error;
+      }
+    }
+
     function logout() {
       setUser(null);
       setToken(null);
     }
 
-    return { user, token, setUser, setToken, login, logout, reset };
+    return { user, token, setUser, setToken, login, logout, reset, resetPassword };
   },
   {
     persist: {

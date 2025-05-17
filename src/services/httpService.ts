@@ -66,14 +66,20 @@ api["auth"] = {
       body: JSON.stringify(data),
       headers,
     }).then((res) => res.json()),
-  reset: <T>(data: T) =>
-    fetch(`${baseUrl}/auth/request-reset-password`, {
+  requestPasswordReset: <T>(data: T) =>
+    fetch(`${baseUrl}/auth/request-password-reset`, {
       method: "POST",
       body: JSON.stringify(data),
       headers,
     }).then((res) => res.json()),
   signup: <T>(data: T) =>
     fetch(`${baseUrl}/auth/signup`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers,
+    }).then((res) => res.json()),
+  resetPassword: <T>(data: T) =>
+    fetch(`${baseUrl}/auth/reset-password`, {
       method: "POST",
       body: JSON.stringify(data),
       headers,
