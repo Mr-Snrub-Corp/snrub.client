@@ -56,8 +56,8 @@
 
         <div class="flex items-center justify-between mb-12">
           <div class="flex items-center">
-            <Checkbox id="rememberme2" v-model="checked2" :binary="true" class="mr-2" />
-            <label for="rememberme2">Remember me</label>
+            <!-- <Checkbox id="rememberme2" v-model="checked2" :binary="true" class="mr-2" />
+            <label for="rememberme2">Remember me</label> -->
           </div>
           <Button
             class="font-medium no-underline ml-2 text-primary text-right"

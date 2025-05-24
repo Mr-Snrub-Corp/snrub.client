@@ -3,6 +3,7 @@ const api: { [key: string]: any } = {};
 const baseUrl = import.meta.env.VITE_API_URL; // Example usage of process;
 const headers = { "Content-Type": "application/json" };
 import { useAuthStore } from "../stores/auth";
+import router from "@/router";
 
 // Function that works with both store and fallback to localStorage
 function getHeaders() {
@@ -31,10 +32,25 @@ async function handleResponse(response: Response) {
     // Debug what we're getting from the server
     console.log("Error data from server:", errorData);
 
+    let errorMessage = "Something went wrong";
+
+    // Handle authentication errors (401 or 403)
+    if (response.status === 401) {
+      console.log("Authentication error, redirecting to login");
+      router.push({ name: "login" });
+    }
+
     // Make sure we're using the detail field correctly
-    const errorMessage = Array.isArray(errorData.detail)
-      ? errorData.detail[0].msg
-      : errorData.detail || "Something went wrong";
+    if (response.status !== 500) {
+      if (Array.isArray(errorData.detail)) {
+        errorMessage = errorData.detail[0].msg;
+      } else {
+        errorMessage = errorData.detail;
+      }
+    }
+    // errorMessage = Array.isArray(errorData.detail)
+    //   ? errorData.detail[0].msg
+    //   : errorData.detail || "Something went wrong";
 
     throw new HttpError(errorMessage, response.status, response.statusText, errorData);
   }
