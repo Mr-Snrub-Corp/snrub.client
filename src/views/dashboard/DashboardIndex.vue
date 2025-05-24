@@ -170,7 +170,10 @@
           </li>
         </ul>
       </div>
-      <router-view />
+      <div v-if="isLoading" class="flex justify-center items-center h-full">
+        <ProgressSpinner />
+      </div>
+      <router-view v-else />
     </div>
   </div>
 </template>
@@ -178,16 +181,20 @@
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import InputText from "primevue/inputtext";
+import ProgressSpinner from "primevue/progressspinner";
 import OverlayBadge from "primevue/overlaybadge";
 import { useUsersStore } from "@/stores/users";
-import { onMounted } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const usersStore = useUsersStore();
+const isLoading = ref(false);
 
-onMounted(() => {
+onBeforeMount(() => {
+  isLoading.value = true;
   usersStore.fetchUsers().then(() => {
+    isLoading.value = false;
     router.push({ name: "users" });
   });
 });
