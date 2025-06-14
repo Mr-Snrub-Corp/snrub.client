@@ -76,18 +76,19 @@
           </ul>
         </div>
         <div class="mt-auto border-t border-primary-200/30 p-4 flex justify-between">
-          <a
+          <!-- <a
             class="w-10 h-10 rounded-xl cursor-pointer inline-flex items-center justify-center border-2 border-primary-200/30 hover:bg-primary-emphasis text-primary-contrast transition-colors duration-150"
           >
             <img
               src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/circle/avatar-f-6.png"
               class="w-6 h-6"
             />
-          </a>
+          </a> -->
           <a
+            @click="handleLogout"
             class="w-10 h-10 rounded-xl cursor-pointer inline-flex items-center justify-center border-2 border-primary-200/30 hover:bg-primary-emphasis text-primary-contrast transition-colors duration-150"
           >
-            <i class="pi pi-slack text-xl" />
+            <i class="pi pi-sign-out text-xl" />
           </a>
           <a
             class="w-10 h-10 rounded-xl cursor-pointer inline-flex items-center justify-center border-2 border-primary-200/30 hover:bg-primary-emphasis text-primary-contrast transition-colors duration-150"
@@ -184,12 +185,19 @@ import InputText from "primevue/inputtext";
 import ProgressSpinner from "primevue/progressspinner";
 import OverlayBadge from "primevue/overlaybadge";
 import { useUsersStore } from "@/stores/users";
+import { useAuthStore } from "@/stores/auth";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const usersStore = useUsersStore();
+const authStore = useAuthStore();
 const isLoading = ref(false);
+
+function handleLogout() {
+  console.log("logout");
+  authStore.logout();
+}
 
 onBeforeMount(() => {
   isLoading.value = true;

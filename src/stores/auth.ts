@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import api from "@/services/httpService";
 
 // Define types for the API response
-interface User {
+export interface User {
   uid: string;
   email: string;
   name: string;
@@ -18,8 +18,12 @@ interface AuthResponse {
 export const useAuthStore = defineStore(
   "auth",
   () => {
+    // State
     const user = ref<User | null>(null);
     const token = ref<string | null>(null);
+
+    // Getters
+    const isLoggedIn = computed(() => !!user.value && !!token.value);
 
     function setUser(newUser: User | null) {
       user.value = newUser;
@@ -83,7 +87,18 @@ export const useAuthStore = defineStore(
       setToken(null);
     }
 
-    return { user, token, setUser, setToken, login, loginGoogle, logout, reset, resetPassword };
+    return {
+      user,
+      token,
+      isLoggedIn,
+      setUser,
+      setToken,
+      login,
+      loginGoogle,
+      logout,
+      reset,
+      resetPassword,
+    };
   },
   {
     persist: {

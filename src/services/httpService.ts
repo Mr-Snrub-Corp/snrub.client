@@ -37,7 +37,7 @@ async function handleResponse(response: Response) {
     // Handle authentication errors (401 or 403)
     if (response.status === 401) {
       console.log("Authentication error, redirecting to login");
-      router.push({ name: "login" });
+      router.push({ name: "Login" });
     }
 
     // Make sure we're using the detail field correctly
@@ -100,10 +100,14 @@ api["auth"] = {
       body: JSON.stringify(data),
       headers,
     }).then((res) => handleResponse(res)),
-  loginGoogle: <T>(data: T) =>
+  loginGoogle: () =>
     fetch(`${baseUrl}/auth/google/login`, {
+      method: "GET",
+      headers,
+    }).then((res) => handleResponse(res)),
+  logout: () =>
+    fetch(`${baseUrl}/auth/logout`, {
       method: "POST",
-      body: JSON.stringify(data),
       headers,
     }).then((res) => handleResponse(res)),
   requestPasswordReset: <T>(data: T) =>

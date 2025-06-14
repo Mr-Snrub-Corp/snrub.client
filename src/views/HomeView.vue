@@ -15,7 +15,7 @@
             incididunt ut labore et dolore magna aliqua.
           </p>
           <div class="flex items-center justify-center lg:justify-start gap-6">
-            <Button label="Login" severity="secondary" as="router-link" to="/login" />
+            <Button label="Login" severity="secondary" as="router-link" to="auth/login" />
             <Button
               label="Live Demo"
               severity="secondary"

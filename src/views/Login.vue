@@ -67,7 +67,7 @@
               severity="secondary"
               variant="text"
               as="router-link"
-              to="/forgot"
+              :to="{ name: 'Forgot' }"
             >
             </Button>
           </div>
@@ -147,9 +147,14 @@ function handleLogin() {
     });
 }
 
+// function handleGoogleLogin() {
+//   console.log("google login");
+//   authStore.loginGoogle();
+// }
+
 function handleGoogleLogin() {
-  console.log("google login");
-  authStore.loginGoogle();
+  // Direct browser navigation - this will follow the 302 redirect automatically
+  window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL; //  'http://localhost:8000/api/auth/google/login';
 }
 
 function handleSpotifyLogin() {
