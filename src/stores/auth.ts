@@ -82,9 +82,16 @@ export const useAuthStore = defineStore(
       }
     }
 
-    function logout() {
-      setUser(null);
-      setToken(null);
+    async function logout() {
+      try {
+        await api.auth.logout();
+        setUser(null);
+        setToken(null);
+        return;
+      } catch (error) {
+        console.error("Logout failed:", error);
+        return;
+      }
     }
 
     return {

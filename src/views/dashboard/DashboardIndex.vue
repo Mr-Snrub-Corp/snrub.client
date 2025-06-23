@@ -194,9 +194,10 @@ const usersStore = useUsersStore();
 const authStore = useAuthStore();
 const isLoading = ref(false);
 
-function handleLogout() {
+async function handleLogout() {
   console.log("logout");
-  authStore.logout();
+  await authStore.logout();
+  router.push({ name: "Login" });
 }
 
 onBeforeMount(() => {

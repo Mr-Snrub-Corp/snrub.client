@@ -108,7 +108,7 @@ api["auth"] = {
   logout: () =>
     fetch(`${baseUrl}/auth/logout`, {
       method: "POST",
-      headers,
+      headers: getHeaders(),
     }).then((res) => handleResponse(res)),
   requestPasswordReset: <T>(data: T) =>
     fetch(`${baseUrl}/auth/request-password-reset`, {
