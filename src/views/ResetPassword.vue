@@ -25,7 +25,7 @@
           <div
             class="text-surface-900 dark:text-surface-0 text-2xl font-semibold leading-tight text-center w-full"
           >
-            Welcome Back
+            Lets Reset
           </div>
         </div>
       </div>
@@ -198,8 +198,9 @@ async function handleReset() {
       token: token.value,
       new_password: password.value,
     });
+    // TODO add toast before redirect
     // Redirect to login page after successful reset
-    router.push("/login");
+    router.push("/auth/login");
   } catch (error) {
     console.error("Password reset failed:", error);
   }

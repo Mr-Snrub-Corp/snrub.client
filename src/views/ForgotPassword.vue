@@ -42,7 +42,7 @@
             severity="secondary"
             variant="text"
             as="router-link"
-            to="/login"
+            to="/auth/login"
           >
           </Button>
         </div>

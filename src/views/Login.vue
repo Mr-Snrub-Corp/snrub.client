@@ -147,11 +147,6 @@ function handleLogin() {
     });
 }
 
-// function handleGoogleLogin() {
-//   console.log("google login");
-//   authStore.loginGoogle();
-// }
-
 function handleGoogleLogin() {
   // Direct browser navigation - this will follow the 302 redirect automatically
   window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL; //  'http://localhost:8000/api/auth/google/login';

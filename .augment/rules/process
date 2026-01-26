@@ -1,0 +1,9 @@
+# Process
+
+## Development Style
+
+- Follow DRY (Don't Repeat Yourself) principles.
+- Use primeVue components whenever possible
+  - Reference PrimeVue's LLM-optimized docs: https://primevue.org/llms/
+  - Component docs available in Markdown: https://primevue.org/{component}.md
+- Use tailwind (version 4) helper classes
