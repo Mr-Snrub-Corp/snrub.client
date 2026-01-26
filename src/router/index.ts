@@ -54,6 +54,48 @@ const router = createRouter({
           name: "users",
           component: () => import("@/views/dashboard/users/Users.vue"),
         },
+        {
+          path: "design",
+          name: "design",
+          component: () => import("@/views/dashboard/design/DesignIndex.vue"),
+          children: [
+            {
+              path: "form",
+              name: "designForm",
+              component: () => import("@/views/dashboard/design/Form.vue"),
+            },
+            {
+              path: "button",
+              name: "designButton",
+              component: () => import("@/views/dashboard/design/Button.vue"),
+            },
+            {
+              path: "data",
+              name: "designData",
+              component: () => import("@/views/dashboard/design/Data.vue"),
+            },
+            {
+              path: "panel",
+              name: "designPanel",
+              component: () => import("@/views/dashboard/design/Panel.vue"),
+            },
+            {
+              path: "overlay",
+              name: "designOverlay",
+              component: () => import("@/views/dashboard/design/Overlay.vue"),
+            },
+            {
+              path: "messages",
+              name: "designMessages",
+              component: () => import("@/views/dashboard/design/Messages.vue"),
+            },
+            {
+              path: "misc",
+              name: "designMisc",
+              component: () => import("@/views/dashboard/design/Misc.vue"),
+            },
+          ],
+        },
       ],
     },
   ],

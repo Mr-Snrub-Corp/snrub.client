@@ -47,7 +47,8 @@
               >Team</span
             >
           </RouterLink>
-          <a
+          <RouterLink
+            :to="{ name: 'designForm' }"
             class="w-full flex flex-row lg:flex-col items-center cursor-pointer p-2 lg:justify-center rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group lg:gap-2"
           >
             <i
@@ -56,7 +57,7 @@
             <span class="ml-2 lg:ml-0 font-medium text-base lg:text-sm leading-tight lg:block"
               >Design</span
             >
-          </a>
+          </RouterLink>
           <a
             class="w-full flex flex-row lg:flex-col items-center cursor-pointer p-2 lg:justify-center rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group lg:gap-2"
           >
@@ -148,15 +149,16 @@
               />
               <span class="ml-2 font-medium text-base leading-tight">Team</span>
             </RouterLink>
-            <a
+            <RouterLink
+              :to="{ name: 'designForm' }"
               @click="closeCallback"
               class="w-full flex flex-row items-center cursor-pointer p-2 rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group"
             >
               <i
                 class="pi pi-palette text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
               />
-              <span class="ml-2 font-medium text-base leading-tight">Design System</span>
-            </a>
+              <span class="ml-2 font-medium text-base leading-tight">Design</span>
+            </RouterLink>
             <a
               @click="closeCallback"
               class="w-full flex flex-row items-center cursor-pointer p-2 rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group"
