@@ -1,14 +1,11 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import api from "@/services/httpService";
+import { type User, UserStatus } from "@/types/user";
 
-// Define User interface  DRY this
-interface User {
-  uid: string;
-  email: string;
-  name: string;
-  role: string;
-}
+// Re-export for convenience
+export type { User };
+export { UserStatus };
 
 export const useUsersStore = defineStore("users", () => {
   // State

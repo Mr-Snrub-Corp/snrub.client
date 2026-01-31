@@ -3,7 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore, type User } from "@/stores/auth";
+import { useAuthStore } from "@/stores/auth";
+import { type User } from "@/types/user";
 import { computed, nextTick, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { jwtDecode } from "jwt-decode";

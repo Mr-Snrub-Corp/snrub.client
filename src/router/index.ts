@@ -55,6 +55,16 @@ const router = createRouter({
           component: () => import("@/views/dashboard/users/Users.vue"),
         },
         {
+          path: "users/new",
+          name: "userNew",
+          component: () => import("@/views/dashboard/users/UserNew.vue"),
+        },
+        {
+          path: "users/:uid",
+          name: "userUpdate",
+          component: () => import("@/views/dashboard/users/UserUpdate.vue"),
+        },
+        {
           path: "design",
           name: "design",
           component: () => import("@/views/dashboard/design/DesignIndex.vue"),
