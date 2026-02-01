@@ -129,9 +129,10 @@ import FileUpload from "primevue/fileupload";
 import type { FileUploadSelectEvent } from "primevue/fileupload";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, maxLength, helpers } from "@vuelidate/validators";
-import { UserStatus } from "@/types/user";
-import { MAX_LENGTH, USER_ROLES } from "@/constants/validation";
+import { USER_ROLES, USER_STATUS } from "@/constants/enums";
+import { MAX_LENGTH } from "@/constants/validation";
 import { useUsersStore } from "@/stores/users";
+import { formatLabel } from "@/utils";
 
 const router = useRouter();
 const route = useRoute();
@@ -148,20 +149,25 @@ const formData = ref({
   email: "",
   name: "",
   role: "",
-  userStatus: UserStatus.ACTIVE,
+  userStatus: USER_STATUS.ACTIVE,
   photo: "",
 });
 
 // Role options
-const roleOptions = ref([...USER_ROLES]);
+const roleOptions = ref(
+  Object.values(USER_ROLES).map((role) => ({
+    label: formatLabel(role),
+    value: role,
+  })),
+);
 
 // User status options
-const userStatusOptions = ref([
-  { label: "Active", value: UserStatus.ACTIVE },
-  { label: "Inactive", value: UserStatus.INACTIVE },
-  { label: "Deceased", value: UserStatus.DECEASED },
-  { label: "Suspended", value: UserStatus.SUSPENDED },
-]);
+const userStatusOptions = ref(
+  Object.values(USER_STATUS).map((status) => ({
+    label: formatLabel(status),
+    value: status,
+  })),
+);
 
 // Validation rules (same as UserNew)
 const rules = {
