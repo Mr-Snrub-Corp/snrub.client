@@ -7,3 +7,14 @@
   - Reference PrimeVue's LLM-optimized docs: https://primevue.org/llms/
   - Component docs available in Markdown: https://primevue.org/{component}.md
 - Use tailwind (version 4) helper classes
+- Follow best practices for enterprise software. type interfaces should be in types/ they should be derived from constants when appropriate. Re-used patterns should be moved out of componenets into composables
+
+## No Speculative or "Convenience" Code
+
+- **Do NOT add code that is not immediately used.** Every line of code you write must be called or referenced by existing code.
+- **Do NOT add re-exports, or abstractions "for convenience"** unless explicitly requested.
+- **Consult with user before adding** helper functions, utility wrappers.
+- **Do NOT anticipate future needs.** Write only what is required to complete the current task.
+- **Follow existing project patterns exactly.** Do not introduce new patterns, conventions, or "improvements" without consultation with the user.
+
+If you write code, something must call it. If nothing calls it, don't write it.

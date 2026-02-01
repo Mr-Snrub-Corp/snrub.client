@@ -12,7 +12,8 @@ mot.frontend/
 ├── src/
 │ ├── assets/ # Static assets, CSS, and PrimeVue component styles
 │ ├── components/ # Reusable Vue components
-│ ├── router/ # Vue Router configuration
+│ ├── constants/
+│ ├── router/
 │ ├── services/ # API services and HTTP client
 │ ├── stores/ # Pinia state management stores
 │ ├── types/ # TypeScript type definitions
