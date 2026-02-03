@@ -12,107 +12,111 @@
       class="col-span-12 lg:col-span-10 xl:col-span-8 bg-surface-0 dark:bg-surface-900 p-7 shadow rounded-2xl flex-auto"
     >
       <div class="flex flex-col gap-7">
-        <div class="text-surface-900 dark:text-surface-0 font-semibold text-base">
-          User Information
-        </div>
+        <div class="text-surface-900 dark:text-surface-0 font-semibold text-base">Profile</div>
 
-        <div class="flex flex-col gap-6">
-          <!-- Photo Upload Section -->
-          <div class="flex flex-col gap-2">
-            <label class="text-surface-900 dark:text-surface-0">Photo</label>
-            <div class="flex flex-col items-center gap-3">
-              <img
-                :src="formData.photo || 'https://via.placeholder.com/150'"
-                alt="User photo"
-                class="h-24 w-24 rounded-lg object-cover"
+        <div class="flex gap-10 flex-col-reverse md:flex-row">
+          <div class="flex-auto flex flex-col gap-6">
+            <div class="flex flex-col gap-2">
+              <label for="email" class="text-surface-900 dark:text-surface-0">Email *</label>
+              <InputText
+                id="email"
+                v-model="formData.email"
+                type="email"
+                class="w-full"
+                :invalid="v$.email.$error"
+                @blur="v$.email.$touch()"
               />
-              <FileUpload
-                mode="basic"
-                name="photo"
-                accept="image/*"
-                :max-file-size="1000000"
-                choose-label="Upload Photo"
-                choose-icon="pi pi-upload"
-                @select="onPhotoSelect"
+              <small v-if="v$.email.$error" class="text-red-500">
+                {{ v$.email.$errors[0]?.$message }}
+              </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="name" class="text-surface-900 dark:text-surface-0">Name *</label>
+              <InputText
+                id="name"
+                v-model="formData.name"
+                type="text"
+                class="w-full"
+                :invalid="v$.name.$error"
+                @blur="v$.name.$touch()"
               />
+              <small v-if="v$.name.$error" class="text-red-500">
+                {{ v$.name.$errors[0]?.$message }}
+              </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="role" class="text-surface-900 dark:text-surface-0">Role *</label>
+              <Select
+                id="role"
+                v-model="formData.role"
+                :options="roleOptions"
+                option-label="label"
+                option-value="value"
+                placeholder="Select a role"
+                class="w-full"
+                :invalid="v$.role.$error"
+                @blur="v$.role.$touch()"
+              />
+              <small v-if="v$.role.$error" class="text-red-500">
+                {{ v$.role.$errors[0]?.$message }}
+              </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="userStatus" class="text-surface-900 dark:text-surface-0"
+                >User Status *</label
+              >
+              <Select
+                id="userStatus"
+                v-model="formData.userStatus"
+                :options="userStatusOptions"
+                option-label="label"
+                option-value="value"
+                placeholder="Select user status"
+                class="w-full"
+                :invalid="v$.userStatus.$error"
+                @blur="v$.userStatus.$touch()"
+              />
+              <small v-if="v$.userStatus.$error" class="text-red-500">
+                {{ v$.userStatus.$errors[0]?.$message }}
+              </small>
             </div>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="email" class="text-surface-900 dark:text-surface-0">Email *</label>
-            <InputText
-              id="email"
-              v-model="formData.email"
-              type="email"
-              class="w-full"
-              :invalid="v$.email.$error"
-              @blur="v$.email.$touch()"
-            />
-            <small v-if="v$.email.$error" class="text-red-500">
-              {{ v$.email.$errors[0]?.$message }}
-            </small>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label for="name" class="text-surface-900 dark:text-surface-0">Name *</label>
-            <InputText
-              id="name"
-              v-model="formData.name"
-              type="text"
-              class="w-full"
-              :invalid="v$.name.$error"
-              @blur="v$.name.$touch()"
-            />
-            <small v-if="v$.name.$error" class="text-red-500">
-              {{ v$.name.$errors[0]?.$message }}
-            </small>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label for="role" class="text-surface-900 dark:text-surface-0">Role *</label>
-            <Select
-              id="role"
-              v-model="formData.role"
-              :options="roleOptions"
-              placeholder="Select a role"
-              class="w-full"
-              :invalid="v$.role.$error"
-              @blur="v$.role.$touch()"
-            />
-            <small v-if="v$.role.$error" class="text-red-500">
-              {{ v$.role.$errors[0]?.$message }}
-            </small>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label for="userStatus" class="text-surface-900 dark:text-surface-0"
-              >User Status *</label
-            >
-            <Select
-              id="userStatus"
-              v-model="formData.userStatus"
-              :options="userStatusOptions"
-              option-label="label"
-              option-value="value"
-              placeholder="Select user status"
-              class="w-full"
-              :invalid="v$.userStatus.$error"
-              @blur="v$.userStatus.$touch()"
-            />
-            <small v-if="v$.userStatus.$error" class="text-red-500">
-              {{ v$.userStatus.$errors[0]?.$message }}
-            </small>
+            <label class="text-surface-900 dark:text-surface-0">Avatar</label>
+            <div class="flex flex-col items-center gap-3">
+              <img
+                :src="formData.photo || '/img/avatar-placeholder.png'"
+                alt="User avatar"
+                class="h-24 w-24 rounded-lg object-cover"
+              />
+              <FileUpload
+                mode="basic"
+                name="avatar"
+                accept="image/*"
+                custom-upload
+                auto
+                :max-file-size="1000000"
+                choose-label="Upload"
+                choose-icon="pi pi-upload"
+                severity="secondary"
+                class="p-button-outlined"
+                @select="onPhotoSelect"
+              />
+            </div>
           </div>
         </div>
 
-        <div class="flex gap-3">
+        <div>
           <Button
-            label="Update User"
+            label="Update Profile"
             severity="primary"
             :disabled="v$.$invalid"
             @click="handleSubmit"
           />
-          <Button label="Cancel" severity="secondary" variant="outlined" @click="handleCancel" />
         </div>
       </div>
     </div>
@@ -133,6 +137,7 @@ import { USER_ROLES, USER_STATUS } from "@/constants/enums";
 import { MAX_LENGTH } from "@/constants/validation";
 import { useUsersStore } from "@/stores/users";
 import { formatLabel } from "@/utils";
+import type { UserRole, UserStatus } from "@/types/user";
 
 const router = useRouter();
 const route = useRoute();
@@ -145,7 +150,13 @@ const uid = route.params.uid as string;
 const isLoading = ref(true);
 
 // Form data
-const formData = ref({
+const formData = ref<{
+  email: string;
+  name: string;
+  role: UserRole | "";
+  userStatus: UserStatus;
+  photo: string;
+}>({
   email: "",
   name: "",
   role: "",
@@ -205,7 +216,7 @@ onMounted(async () => {
       email: userData.email,
       name: userData.name,
       role: userData.role,
-      userStatus: userData.userStatus,
+      userStatus: userData.status,
       photo: userData.photo || "",
     };
   } catch (error) {
@@ -238,7 +249,15 @@ async function handleSubmit() {
   }
 
   try {
-    await usersStore.updateUser(uid, formData.value);
+    // Ensure role is a valid UserRole before submitting
+    const updateData = {
+      email: formData.value.email,
+      name: formData.value.name,
+      role: formData.value.role as UserRole,
+      status: formData.value.userStatus,
+      photo: formData.value.photo,
+    };
+    await usersStore.updateUser(uid, updateData);
     router.push({ name: "users" });
   } catch (error) {
     console.error("Error updating user:", error);
