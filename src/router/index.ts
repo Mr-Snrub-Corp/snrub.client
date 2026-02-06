@@ -58,6 +58,7 @@ const router = createRouter({
           path: "users/new",
           name: "userNew",
           component: () => import("@/views/dashboard/users/UserNew.vue"),
+          meta: { requiresSuperAdmin: true },
         },
         {
           path: "users/:uid",
@@ -123,6 +124,11 @@ router.beforeEach(async (to, from) => {
   ) {
     // redirect the user to the login page
     return { name: "Login" };
+  }
+
+  // Role-based access control
+  if (to.meta.requiresSuperAdmin && !authStore.isSuperAdmin) {
+    return { name: "users" };
   }
 });
 

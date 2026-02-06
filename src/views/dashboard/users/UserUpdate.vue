@@ -2,13 +2,7 @@
   <div>
     <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Update user</h1>
 
-    <div v-if="isLoading" class="text-center py-8">
-      <i class="pi pi-spinner pi-spin text-4xl text-primary"></i>
-      <p class="mt-4 text-surface-600 dark:text-surface-400">Loading user data...</p>
-    </div>
-
     <div
-      v-else
       class="col-span-12 lg:col-span-10 xl:col-span-8 bg-surface-0 dark:bg-surface-900 p-7 shadow rounded-2xl flex-auto"
     >
       <div class="flex flex-col gap-7">
@@ -21,6 +15,7 @@
               <InputText
                 id="email"
                 v-model="formData.email"
+                :disabled="isViewOnlyMode || isUserEditMode"
                 type="email"
                 class="w-full"
                 :invalid="v$.email.$error"
@@ -36,6 +31,7 @@
               <InputText
                 id="name"
                 v-model="formData.name"
+                :disabled="isViewOnlyMode"
                 type="text"
                 class="w-full"
                 :invalid="v$.name.$error"
@@ -51,6 +47,7 @@
               <Select
                 id="role"
                 v-model="formData.role"
+                :disabled="isViewOnlyMode || isUserEditMode"
                 :options="roleOptions"
                 option-label="label"
                 option-value="value"
@@ -71,6 +68,7 @@
               <Select
                 id="userStatus"
                 v-model="formData.userStatus"
+                :disabled="isViewOnlyMode || isUserEditMode"
                 :options="userStatusOptions"
                 option-label="label"
                 option-value="value"
@@ -89,7 +87,7 @@
             <label class="text-surface-900 dark:text-surface-0">Avatar</label>
             <div class="flex flex-col items-center gap-3">
               <img
-                :src="formData.photo || '/img/avatar-placeholder.png'"
+                :src="getUserAvatar()"
                 alt="User avatar"
                 class="h-24 w-24 rounded-lg object-cover"
               />
@@ -124,7 +122,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { computed, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
@@ -136,20 +134,22 @@ import { required, email, maxLength, helpers } from "@vuelidate/validators";
 import { USER_ROLES, USER_STATUS } from "@/constants/enums";
 import { MAX_LENGTH } from "@/constants/validation";
 import { useUsersStore } from "@/stores/users";
+import { useAuthStore } from "@/stores/auth";
 import { formatLabel } from "@/utils";
 import type { UserRole, UserStatus } from "@/types/user";
 
 const router = useRouter();
 const route = useRoute();
 const usersStore = useUsersStore();
+const authStore = useAuthStore();
 
 // Get uid from route params
 const uid = route.params.uid as string;
 
-// Loading state
-const isLoading = ref(true);
+// Get user from store
+const user = usersStore.getUserById(uid);
 
-// Form data
+// Form data - initialize from store user data
 const formData = ref<{
   email: string;
   name: string;
@@ -157,11 +157,11 @@ const formData = ref<{
   userStatus: UserStatus;
   photo: string;
 }>({
-  email: "",
-  name: "",
-  role: "",
-  userStatus: USER_STATUS.ACTIVE,
-  photo: "",
+  email: user?.email || "",
+  name: user?.name || "",
+  role: user?.role || "",
+  userStatus: user?.userStatus || USER_STATUS.ACTIVE,
+  photo: user?.photo || "",
 });
 
 // Role options
@@ -179,6 +179,18 @@ const userStatusOptions = ref(
     value: status,
   })),
 );
+
+// Computeds
+const isViewOnlyMode = computed(() => {
+  return !authStore.isAdmin;
+});
+const isUserEditMode = computed(() => {
+  if (user) {
+    return user.role === USER_ROLES.CREATOR && user.uid === authStore.user?.uid;
+  } else {
+    return false;
+  }
+});
 
 // Validation rules (same as UserNew)
 const rules = {
@@ -207,26 +219,6 @@ const rules = {
 
 const v$ = useVuelidate(rules, formData);
 
-// Fetch user data on mount
-onMounted(async () => {
-  try {
-    const userData = await usersStore.fetchUserById(uid);
-    // Pre-populate form with existing user data
-    formData.value = {
-      email: userData.email,
-      name: userData.name,
-      role: userData.role,
-      userStatus: userData.status,
-      photo: userData.photo || "",
-    };
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    // TODO: Show error message to user
-  } finally {
-    isLoading.value = false;
-  }
-});
-
 // Handle photo upload
 function onPhotoSelect(event: FileUploadSelectEvent) {
   const file = event.files[0];
@@ -234,10 +226,12 @@ function onPhotoSelect(event: FileUploadSelectEvent) {
     // Create a preview URL for the uploaded image
     const reader = new FileReader();
     reader.onload = (e) => {
-      formData.value.photo = e.target?.result as string;
+      const result = e.target?.result as string;
+      // Strip "data:image/png;base64," prefix
+      formData.value.photo = result.split(",")[1];
     };
     reader.readAsDataURL(file);
-    // TODO: Implement actual file upload to server
+    usersStore.uploadPhoto(uid, file);
   }
 }
 
@@ -255,7 +249,6 @@ async function handleSubmit() {
       name: formData.value.name,
       role: formData.value.role as UserRole,
       status: formData.value.userStatus,
-      photo: formData.value.photo,
     };
     await usersStore.updateUser(uid, updateData);
     router.push({ name: "users" });
@@ -265,7 +258,11 @@ async function handleSubmit() {
   }
 }
 
-function handleCancel() {
-  router.push({ name: "users" });
+function getUserAvatar() {
+  if (!formData.value.photo) {
+    return "/img/avatar-placeholder.png";
+  } else {
+    return `data:image/png;base64, ${formData.value.photo}`;
+  }
 }
 </script>

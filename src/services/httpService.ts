@@ -25,6 +25,19 @@ function getHeaders() {
   //   : headers;
 }
 
+// Function for multipart/form-data requests (no Content-Type header)
+function getAuthHeaders(): Record<string, string> {
+  try {
+    const authStore = useAuthStore();
+    if (authStore.token) {
+      return { Authorization: `Bearer ${authStore.token}` };
+    }
+  } catch (e) {
+    console.debug("Falling back to localStorage for auth token");
+  }
+  return {}; // Return empty object if no token
+}
+
 async function handleResponse(response: Response) {
   if (!response.ok) {
     // probably need a try catch here
@@ -92,6 +105,22 @@ function generateApi(endpoint: string) {
 [{ name: "users" }].forEach(({ name }) => {
   api[name] = generateApi(name);
 });
+
+// Extend users API with photo-specific endpoints
+api.users = {
+  ...api.users,
+  uploadPhoto: (uid: string, formData: FormData) =>
+    fetch(`${baseUrl}/users/${uid}/photo`, {
+      method: "PUT",
+      body: formData,
+      headers: getAuthHeaders(),
+    }).then((res) => handleResponse(res)),
+  deletePhoto: (uid: string) =>
+    fetch(`${baseUrl}/users/${uid}/photo`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    }).then((res) => handleResponse(res)),
+};
 
 api["auth"] = {
   login: <T>(data: T) =>

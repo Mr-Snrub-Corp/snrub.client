@@ -12,6 +12,9 @@ export const useUsersStore = defineStore("users", () => {
 
   // Getters
   const getAllUsers = computed(() => users.value);
+  const getUserById = computed(() => (uid: string) => {
+    return users.value.find((user) => user.uid === uid);
+  });
 
   // Actions
   async function createUser(userData: Partial<User>) {
@@ -61,6 +64,13 @@ export const useUsersStore = defineStore("users", () => {
     }
   }
 
+  async function uploadPhoto(uid: string, file: File) {
+    // TODO try / ctach
+    const formData = new FormData();
+    formData.append("file", file);
+    await api.users.uploadPhoto(uid, formData);
+  }
+
   async function deleteUser(uid: string) {
     try {
       await api.users.deleteOne(uid);
@@ -74,10 +84,12 @@ export const useUsersStore = defineStore("users", () => {
   return {
     users,
     getAllUsers,
+    getUserById,
     createUser,
     fetchUsers,
     fetchUserById,
     updateUser,
     deleteUser,
+    uploadPhoto,
   };
 });

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import api from "@/services/httpService";
+import { USER_ROLES } from "@/constants/enums";
 import type { User } from "@/types/user";
 import type { AuthResponse } from "@/types/auth";
 
@@ -16,6 +17,18 @@ export const useAuthStore = defineStore(
 
     // Getters
     const isLoggedIn = computed(() => !!user.value && !!token.value);
+    const getAuthUser = computed(() => {
+      if (isLoggedIn) {
+        return user.value;
+      }
+    });
+    const isAdmin = computed(() => {
+      const role = user.value?.role;
+      return role === USER_ROLES.ADMIN || role === USER_ROLES.SUPER_ADMIN;
+    });
+    const isSuperAdmin = computed(() => {
+      return user.value?.role === USER_ROLES.SUPER_ADMIN;
+    });
 
     function setUser(newUser: User | null) {
       user.value = newUser;
@@ -90,6 +103,9 @@ export const useAuthStore = defineStore(
       user,
       token,
       isLoggedIn,
+      getAuthUser,
+      isAdmin,
+      isSuperAdmin,
       setUser,
       setToken,
       login,

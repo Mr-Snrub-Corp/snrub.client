@@ -200,7 +200,7 @@
         </div>
       </template>
     </Drawer>
-    <div class="min-h-screen flex flex-col relative flex-auto">
+    <div class="h-screen flex flex-col relative flex-auto">
       <div
         class="flex justify-between items-center py-4 px-8 bg-surface-0 dark:bg-surface-900 relative lg:static border-b border-surface-200 dark:border-surface-700"
       >
@@ -235,7 +235,10 @@
       <div v-if="isLoading" class="flex justify-center items-center h-full">
         <ProgressSpinner />
       </div>
-      <div v-else class="p-8 flex flex-col flex-auto bg-surface-0 dark:bg-surface-950">
+      <div
+        v-else
+        class="p-8 flex flex-col flex-auto min-h-0 overflow-y-auto bg-surface-0 dark:bg-surface-950"
+      >
         <router-view />
       </div>
     </div>
