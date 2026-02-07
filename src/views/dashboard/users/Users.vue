@@ -13,6 +13,16 @@
     </div>
 
     <DataTable :value="allUsers" class="shadow-sm rounded-2xl overflow-hidden">
+      <Column field="photo" header="Photo">
+        <template #body="slotProps">
+          <Avatar
+            v-if="slotProps.data.photo"
+            :image="`data:image/png;base64,${slotProps.data.photo}`"
+            class="mr-2 border border-surface-300"
+            shape="circle"
+          />
+        </template>
+      </Column>
       <Column field="name" header="Name"></Column>
       <Column field="email" header="Email"></Column>
       <Column field="role" header="Role"></Column>
@@ -66,6 +76,7 @@
 </template>
 
 <script setup lang="ts">
+import Avatar from "primevue/avatar";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
