@@ -68,7 +68,9 @@ export const useUsersStore = defineStore("users", () => {
     // TODO try / ctach
     const formData = new FormData();
     formData.append("file", file);
-    await api.users.uploadPhoto(uid, formData);
+    const response = await api.users.uploadPhoto(uid, formData);
+    console.log(response);
+    return response;
   }
 
   async function deleteUser(uid: string) {

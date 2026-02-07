@@ -87,7 +87,7 @@
             <label class="text-surface-900 dark:text-surface-0">Avatar</label>
             <div class="flex flex-col items-center gap-3">
               <img
-                :src="getUserAvatar()"
+                :src="getUserAvatar"
                 alt="User avatar"
                 class="h-24 w-24 rounded-lg object-cover"
               />
@@ -99,7 +99,7 @@
                 auto
                 :max-file-size="1000000"
                 choose-label="Upload"
-                choose-icon="pi pi-upload"
+                :choose-icon="isUploadingImage ? 'pi pi-spin pi-spinner' : 'pi pi-upload'"
                 severity="secondary"
                 class="p-button-outlined"
                 @select="onPhotoSelect"
@@ -112,7 +112,7 @@
           <Button
             label="Update Profile"
             severity="primary"
-            :disabled="v$.$invalid"
+            :disabled="v$.$invalid || isViewOnlyMode"
             @click="handleSubmit"
           />
         </div>
@@ -137,18 +137,21 @@ import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
 import { formatLabel } from "@/utils";
 import type { UserRole, UserStatus } from "@/types/user";
+import { useToast } from "primevue/usetoast";
 
 const router = useRouter();
 const route = useRoute();
 const usersStore = useUsersStore();
 const authStore = useAuthStore();
 
+const toast = useToast();
+
 // Get uid from route params
 const uid = route.params.uid as string;
 
 // Get user from store
 const user = usersStore.getUserById(uid);
-
+const isUploadingImage = ref(false);
 // Form data - initialize from store user data
 const formData = ref<{
   email: string;
@@ -220,7 +223,7 @@ const rules = {
 const v$ = useVuelidate(rules, formData);
 
 // Handle photo upload
-function onPhotoSelect(event: FileUploadSelectEvent) {
+async function onPhotoSelect(event: FileUploadSelectEvent) {
   const file = event.files[0];
   if (file) {
     // Create a preview URL for the uploaded image
@@ -231,7 +234,27 @@ function onPhotoSelect(event: FileUploadSelectEvent) {
       formData.value.photo = result.split(",")[1];
     };
     reader.readAsDataURL(file);
-    usersStore.uploadPhoto(uid, file);
+    try {
+      isUploadingImage.value = true;
+      await usersStore.uploadPhoto(uid, file);
+      toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Photo has been successfully uploaded",
+        life: 3000,
+      });
+    } catch (err) {
+      console.error(err);
+      formData.value.photo = "";
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Something went wrong with photo upload",
+        life: 3000,
+      });
+    } finally {
+      isUploadingImage.value = false;
+    }
   }
 }
 
@@ -251,18 +274,29 @@ async function handleSubmit() {
       status: formData.value.userStatus,
     };
     await usersStore.updateUser(uid, updateData);
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "User has been successfully updated",
+      life: 3000,
+    });
     router.push({ name: "users" });
   } catch (error) {
     console.error("Error updating user:", error);
-    // TODO: Show error message to user
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Something went wrong with user update",
+      life: 3000,
+    });
   }
 }
 
-function getUserAvatar() {
+const getUserAvatar = computed(() => {
   if (!formData.value.photo) {
-    return "/img/avatar-placeholder.png";
+    return "/img/avatar-placeholder.png"; // not working when formData.value.photo is reset in error catch
   } else {
     return `data:image/png;base64, ${formData.value.photo}`;
   }
-}
+});
 </script>
