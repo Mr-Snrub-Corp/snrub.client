@@ -42,6 +42,10 @@ export const useUsersStore = defineStore("users", () => {
   async function fetchUserById(uid: string) {
     try {
       const response = await api.users.getOne(uid);
+      const index = users.value.findIndex((user) => user.uid === uid);
+      if (index !== -1) {
+        users.value[index] = { ...users.value[index], ...response };
+      }
       return response;
     } catch (err: any) {
       console.error(`Error fetching user ${uid}:`, err);
@@ -69,7 +73,8 @@ export const useUsersStore = defineStore("users", () => {
     const formData = new FormData();
     formData.append("file", file);
     const response = await api.users.uploadPhoto(uid, formData);
-    console.log(response);
+    // retrieve updated user
+    fetchUserById(uid);
     return response;
   }
 

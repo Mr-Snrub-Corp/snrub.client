@@ -67,18 +67,18 @@
               >
               <Select
                 id="userStatus"
-                v-model="formData.userStatus"
+                v-model="formData.status"
                 :disabled="isViewOnlyMode || isUserEditMode"
                 :options="userStatusOptions"
                 option-label="label"
                 option-value="value"
                 placeholder="Select user status"
                 class="w-full"
-                :invalid="v$.userStatus.$error"
-                @blur="v$.userStatus.$touch()"
+                :invalid="v$.status.$error"
+                @blur="v$.status.$touch()"
               />
-              <small v-if="v$.userStatus.$error" class="text-red-500">
-                {{ v$.userStatus.$errors[0]?.$message }}
+              <small v-if="v$.status.$error" class="text-red-500">
+                {{ v$.status.$errors[0]?.$message }}
               </small>
             </div>
           </div>
@@ -164,13 +164,13 @@ const formData = ref<{
   email: string;
   name: string;
   role: UserRole | "";
-  userStatus: UserStatus;
+  status: UserStatus;
   photo: string;
 }>({
   email: user?.email || "",
   name: user?.name || "",
   role: user?.role || "",
-  userStatus: user?.userStatus || USER_STATUS.ACTIVE,
+  status: user?.status || USER_STATUS.ACTIVE,
   photo: user?.photo || "",
 });
 
@@ -222,7 +222,7 @@ const rules = {
   role: {
     required: helpers.withMessage("Role is required", required),
   },
-  userStatus: {
+  status: {
     required: helpers.withMessage("User status is required", required),
   },
 };
@@ -275,7 +275,7 @@ async function handleSubmit() {
       email: formData.value.email,
       name: formData.value.name,
       role: formData.value.role as UserRole,
-      status: formData.value.userStatus,
+      status: formData.value.status,
     };
     await usersStore.updateUser(uid, updateData);
     toast.add({
