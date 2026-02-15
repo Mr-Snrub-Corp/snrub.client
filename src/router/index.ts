@@ -89,6 +89,12 @@ const router = createRouter({
                 import("@/views/dashboard/incidents/IncidentReportDetail.vue"),
             },
             {
+              path: "reports/:uid/edit",
+              name: "incidentReportEdit",
+              component: () =>
+                import("@/views/dashboard/incidents/IncidentReportEdit.vue"),
+            },
+            {
               path: "types",
               name: "incidentTypes",
               component: () =>

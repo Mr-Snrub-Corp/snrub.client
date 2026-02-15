@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import api from "@/services/httpService";
-import type { IncidentReport, IncidentReportCreate } from "@/types/incidentReport";
+import type { IncidentReport, IncidentReportCreate, IncidentReportUpdate } from "@/types/incidentReport";
 
 export const useIncidentReportsStore = defineStore("incidentReports", () => {
   // State
@@ -52,6 +52,17 @@ export const useIncidentReportsStore = defineStore("incidentReports", () => {
     }
   }
 
+  async function updateIncidentReport(uid: string, data: IncidentReportUpdate) {
+    try {
+      const response = await api.incidentReports.updateOne(uid, data);
+      incidentReports.value[uid] = response;
+      return response;
+    } catch (err) {
+      console.error(`Error updating incident report ${uid}:`, err);
+      throw err;
+    }
+  }
+
   return {
     incidentReports,
     getAllIncidentReports,
@@ -59,5 +70,6 @@ export const useIncidentReportsStore = defineStore("incidentReports", () => {
     createIncidentReport,
     fetchIncidentReports,
     fetchIncidentReportById,
+    updateIncidentReport,
   };
 });

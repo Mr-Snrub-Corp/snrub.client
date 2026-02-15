@@ -40,6 +40,14 @@ export interface IncidentReportCreate {
   subjects?: IncidentReportSubjectCreate[];
 }
 
+export interface IncidentReportUpdate {
+  description?: string | null;
+  severity?: number;
+  status?: IncidentStatus;
+  escalation_level?: EscalationLevel;
+  subjects?: IncidentReportSubjectCreate[];
+}
+
 export interface EnrichedReport extends IncidentReport {
   incidentType: IncidentType;
 }

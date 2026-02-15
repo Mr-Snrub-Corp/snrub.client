@@ -14,6 +14,7 @@
           icon="pi pi-pencil"
           variant="outlined"
           severity="primary"
+          @click="router.push({ name: 'incidentReportEdit', params: { uid } })"
         />
       </div>
 
