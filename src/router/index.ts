@@ -68,18 +68,33 @@ const router = createRouter({
         },
         {
           path: "incidents",
-          name: "incidents",
           component: () => import("@/views/dashboard/incidents/IncidentsIndex.vue"),
-        },
-        {
-          path: "incidents/reports",
-          name: "incidentReports",
-          component: () => import("@/views/dashboard/incidents/IncidentReports.vue"),
-        },
-        {
-          path: "incidents/types",
-          name: "incidentTypes",
-          component: () => import("@/views/dashboard/incidents/IncidentTypes.vue"),
+          children: [
+            {
+              path: "",
+              name: "incidents",
+              component: () =>
+                import("@/views/dashboard/incidents/IncidentsDashboard.vue"),
+            },
+            {
+              path: "reports",
+              name: "incidentReports",
+              component: () =>
+                import("@/views/dashboard/incidents/IncidentReports.vue"),
+            },
+            {
+              path: "reports/:uid",
+              name: "incidentReportDetail",
+              component: () =>
+                import("@/views/dashboard/incidents/IncidentReportDetail.vue"),
+            },
+            {
+              path: "types",
+              name: "incidentTypes",
+              component: () =>
+                import("@/views/dashboard/incidents/IncidentTypes.vue"),
+            },
+          ],
         },
         {
           path: "design",

@@ -239,7 +239,7 @@
       </div>
       <div
         v-else
-        class="p-8 flex flex-col flex-auto min-h-0 overflow-y-auto bg-surface-0 dark:bg-surface-950"
+        class="flex flex-col flex-auto min-h-0 overflow-y-auto bg-surface-0 dark:bg-surface-950"
       >
         <router-view />
       </div>
@@ -283,7 +283,6 @@ onBeforeMount(() => {
   isLoading.value = true;
   usersStore.fetchUsers().then(() => {
     isLoading.value = false;
-    router.push({ name: "users" });
   });
 });
 </script>
