@@ -40,6 +40,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
+      meta: { title: "Snrub Corp | Welcome" },
     },
     {
       path: "/dashboard",
@@ -64,6 +65,21 @@ const router = createRouter({
           path: "users/:uid",
           name: "userUpdate",
           component: () => import("@/views/dashboard/users/UserUpdate.vue"),
+        },
+        {
+          path: "incidents",
+          name: "incidents",
+          component: () => import("@/views/dashboard/incidents/IncidentsIndex.vue"),
+        },
+        {
+          path: "incidents/reports",
+          name: "incidentReports",
+          component: () => import("@/views/dashboard/incidents/IncidentReports.vue"),
+        },
+        {
+          path: "incidents/types",
+          name: "incidentTypes",
+          component: () => import("@/views/dashboard/incidents/IncidentTypes.vue"),
         },
         {
           path: "design",

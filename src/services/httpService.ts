@@ -72,10 +72,21 @@ async function handleResponse(response: Response) {
 
 function generateApi(endpoint: string) {
   return {
-    get: () =>
-      fetch(`${baseUrl}/${endpoint}`, { method: "GET", headers: getHeaders() }).then((res) =>
+    get: (params?: Record<string, string | number | string[]>) => {
+      const url = new URL(`${baseUrl}/${endpoint}`);
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            value.forEach((v) => url.searchParams.append(key, v));
+          } else if (value !== undefined && value !== null) {
+            url.searchParams.append(key, String(value));
+          }
+        });
+      }
+      return fetch(url.toString(), { method: "GET", headers: getHeaders() }).then((res) =>
         handleResponse(res),
-      ),
+      );
+    },
     getOne: (uid: string) =>
       fetch(`${baseUrl}/${endpoint}/${uid}`, { method: "GET", headers: getHeaders() }).then((res) =>
         handleResponse(res),
@@ -105,6 +116,9 @@ function generateApi(endpoint: string) {
 [{ name: "users" }].forEach(({ name }) => {
   api[name] = generateApi(name);
 });
+
+api.incidentTypes = generateApi("incident-types");
+api.incidentReports = generateApi("incident-reports");
 
 // Extend users API with photo-specific endpoints
 api.users = {
