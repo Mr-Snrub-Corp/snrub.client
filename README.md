@@ -67,3 +67,5 @@ npm run lint
 
 // need to modify the httpService.ts to properly handle HTTP error status codes.
 // setup some error interceptor
+
+// fiel upload validation (dimensions, size, format)

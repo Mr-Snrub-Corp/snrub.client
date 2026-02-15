@@ -6,20 +6,20 @@
           <h1
             class="text-3xl lg:text-5xl font-bold text-surface-900 dark:text-surface-0 mb-4 lg:leading-normal text-center lg:text-left"
           >
-            Create the screens your <br /><span class="text-primary">visitors deserve to see</span>
+            Snrub Corp
           </h1>
           <p
             class="text-surface-700 dark:text-surface-200 leading-normal mb-8 text-center lg:text-left"
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.
+            Welcome to the internal dashboard for Springfield's Nuclear Power Plant.
           </p>
           <div class="flex items-center justify-center lg:justify-start gap-6">
             <Button label="Login" severity="secondary" as="router-link" to="auth/login" />
             <Button
-              label="Live Demo"
+              label="Contact"
               severity="secondary"
               variant="outlined"
+              disabled
               type="button"
               outlined
             />
@@ -27,8 +27,9 @@
         </div>
       </div>
       <div class="flex-1 overflow-hidden">
+        <!-- src="/img/power-plant-hero.png" -->
         <img
-          src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/hero/hero-1.png"
+          src="/img/power-plant-hero.png"
           alt="hero-1"
           class="h-full w-full object-cover lg:[clip-path:polygon(12%_0,100%_0%,100%_100%,0_100%)]"
         />
@@ -37,5 +38,10 @@
   </main>
 </template>
 <script setup lang="ts">
+import { useTitle } from "@vueuse/core";
 import Button from "primevue/button";
+
+const title = useTitle();
+
+title.value = "Snrub Corp | Welcome";
 </script>

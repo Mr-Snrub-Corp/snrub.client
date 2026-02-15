@@ -67,18 +67,18 @@
               >
               <Select
                 id="userStatus"
-                v-model="formData.userStatus"
+                v-model="formData.status"
                 :disabled="isViewOnlyMode || isUserEditMode"
                 :options="userStatusOptions"
                 option-label="label"
                 option-value="value"
                 placeholder="Select user status"
                 class="w-full"
-                :invalid="v$.userStatus.$error"
-                @blur="v$.userStatus.$touch()"
+                :invalid="v$.status.$error"
+                @blur="v$.status.$touch()"
               />
-              <small v-if="v$.userStatus.$error" class="text-red-500">
-                {{ v$.userStatus.$errors[0]?.$message }}
+              <small v-if="v$.status.$error" class="text-red-500">
+                {{ v$.status.$errors[0]?.$message }}
               </small>
             </div>
           </div>
@@ -86,10 +86,17 @@
           <div class="flex flex-col gap-2">
             <label class="text-surface-900 dark:text-surface-0">Avatar</label>
             <div class="flex flex-col items-center gap-3">
+              <div
+                v-if="isUploadingImage"
+                class="flex items-center justify-center h-32 w-32 rounded-lg border border-surface-300"
+              >
+                <i class="pi pi-spin pi-spinner text-4xl text-surface-400" />
+              </div>
               <img
+                v-else
                 :src="getUserAvatar"
                 alt="User avatar"
-                class="h-24 w-24 rounded-lg object-cover"
+                class="h-32 w-32 rounded-lg object-cover border border-surface-300"
               />
               <FileUpload
                 mode="basic"
@@ -101,7 +108,7 @@
                 choose-label="Upload"
                 :choose-icon="isUploadingImage ? 'pi pi-spin pi-spinner' : 'pi pi-upload'"
                 severity="secondary"
-                class="p-button-outlined"
+                class="w-32 p-button-outlined"
                 @select="onPhotoSelect"
               />
             </div>
@@ -157,13 +164,13 @@ const formData = ref<{
   email: string;
   name: string;
   role: UserRole | "";
-  userStatus: UserStatus;
+  status: UserStatus;
   photo: string;
 }>({
   email: user?.email || "",
   name: user?.name || "",
   role: user?.role || "",
-  userStatus: user?.userStatus || USER_STATUS.ACTIVE,
+  status: user?.status || USER_STATUS.ACTIVE,
   photo: user?.photo || "",
 });
 
@@ -215,7 +222,7 @@ const rules = {
   role: {
     required: helpers.withMessage("Role is required", required),
   },
-  userStatus: {
+  status: {
     required: helpers.withMessage("User status is required", required),
   },
 };
@@ -225,36 +232,33 @@ const v$ = useVuelidate(rules, formData);
 // Handle photo upload
 async function onPhotoSelect(event: FileUploadSelectEvent) {
   const file = event.files[0];
-  if (file) {
-    // Create a preview URL for the uploaded image
+  if (!file) return;
+
+  try {
+    isUploadingImage.value = true;
+    await usersStore.uploadPhoto(uid, file);
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
-      // Strip "data:image/png;base64," prefix
       formData.value.photo = result.split(",")[1];
     };
     reader.readAsDataURL(file);
-    try {
-      isUploadingImage.value = true;
-      await usersStore.uploadPhoto(uid, file);
-      toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: "Photo has been successfully uploaded",
-        life: 3000,
-      });
-    } catch (err) {
-      console.error(err);
-      formData.value.photo = "";
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: "Something went wrong with photo upload",
-        life: 3000,
-      });
-    } finally {
-      isUploadingImage.value = false;
-    }
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "Photo has been successfully uploaded",
+      life: 3000,
+    });
+  } catch (err) {
+    console.error(err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Something went wrong with photo upload",
+      life: 3000,
+    });
+  } finally {
+    isUploadingImage.value = false;
   }
 }
 
@@ -271,7 +275,7 @@ async function handleSubmit() {
       email: formData.value.email,
       name: formData.value.name,
       role: formData.value.role as UserRole,
-      status: formData.value.userStatus,
+      status: formData.value.status,
     };
     await usersStore.updateUser(uid, updateData);
     toast.add({
@@ -294,9 +298,9 @@ async function handleSubmit() {
 
 const getUserAvatar = computed(() => {
   if (!formData.value.photo) {
-    return "/img/avatar-placeholder.png"; // not working when formData.value.photo is reset in error catch
+    return "/img/avatar-placeholder.png";
   } else {
-    return `data:image/png;base64, ${formData.value.photo}`;
+    return `data:image/png;base64,${formData.value.photo}`;
   }
 });
 </script>

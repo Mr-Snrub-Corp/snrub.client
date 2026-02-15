@@ -18,6 +18,6 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
-  userStatus: UserStatus;
+  status: UserStatus;
   photo?: string; // Optional - URL to user's photo
 }

@@ -65,17 +65,17 @@
             >
             <Select
               id="userStatus"
-              v-model="formData.userStatus"
+              v-model="formData.status"
               :options="userStatusOptions"
               option-label="label"
               option-value="value"
               placeholder="Select user status"
               class="w-full"
-              :invalid="v$.userStatus.$error"
-              @blur="v$.userStatus.$touch()"
+              :invalid="v$.status.$error"
+              @blur="v$.status.$touch()"
             />
-            <small v-if="v$.userStatus.$error" class="text-red-500">
-              {{ v$.userStatus.$errors[0]?.$message }}
+            <small v-if="v$.status.$error" class="text-red-500">
+              {{ v$.status.$errors[0]?.$message }}
             </small>
           </div>
 
@@ -131,8 +131,8 @@ const usersStore = useUsersStore();
 const formData = ref({
   email: "",
   name: "",
-  role: "",
-  userStatus: USER_STATUS.ACTIVE,
+  role: USER_ROLES.VIEWER,
+  status: USER_STATUS.ACTIVE,
   password: "",
 });
 
@@ -172,7 +172,7 @@ const rules = {
   role: {
     required: helpers.withMessage("Role is required", required),
   },
-  userStatus: {
+  status: {
     required: helpers.withMessage("User status is required", required),
   },
   password: {
@@ -204,8 +204,6 @@ async function handleSubmit() {
   if (!isValid) {
     return;
   }
-
-  console.log("Creating user:", formData.value);
 
   try {
     await usersStore.createUser(formData.value);
