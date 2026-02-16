@@ -116,7 +116,7 @@ import { useIncidentReportsStore } from "@/stores/incidentReports";
 import { useIncidentTypesStore } from "@/stores/incidentTypes";
 import { useUsersStore } from "@/stores/users";
 import { formatDate, formatTime, formatLabel } from "@/utils";
-import { INCIDENT_STATUS } from "@/constants/enums";
+import { getTagSeverity } from "@/utils/incident";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
 import ProgressSpinner from "primevue/progressspinner";
@@ -150,25 +150,6 @@ function getSubjectName(userId: string) {
   const user = usersStore.getUserById(userId);
   return user?.name ?? userId;
 }
-
-const getTagSeverity = (status: string) => {
-  switch (status) {
-    case INCIDENT_STATUS.REPORTED:
-      return "warn";
-    case INCIDENT_STATUS.UNDER_REVIEW:
-      return "warn";
-    case INCIDENT_STATUS.FALSE_ALARM:
-      return "info";
-    case INCIDENT_STATUS.CONTAINED:
-      return "success";
-    case INCIDENT_STATUS.MITIGATION_IN_PROGRESS:
-      return "warn";
-    case INCIDENT_STATUS.RESOLVED:
-      return "success";
-    default:
-      return "info";
-  }
-};
 
 function handleGoBack() {
   // Check if a previous history entry exists within the current session

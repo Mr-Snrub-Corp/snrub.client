@@ -70,6 +70,7 @@ import Tag from "primevue/tag";
 import ProgressSpinner from "primevue/progressspinner";
 import type { EnrichedReport } from "@/types/incidentReport";
 import { INCIDENT_STATUS } from "@/constants/enums";
+import { getTagSeverity } from "@/utils/incident";
 
 const router = useRouter();
 
@@ -104,25 +105,6 @@ const getStatusColorClass = (status: string) => {
       return "bg-success-500";
     default:
       return "bg-gray-500";
-  }
-};
-
-const getTagSeverity = (status: string) => {
-  switch (status) {
-    case "REPORTED":
-      return "warn";
-    case "UNDER_REVIEW":
-      return "warn";
-    case "FALSE_ALARM":
-      return "info";
-    case "CONTAINED":
-      return "success";
-    case "MITIGATION_IN_PROGRESS":
-      return "warn";
-    case "RESOLVED":
-      return "success";
-    default:
-      return "info";
   }
 };
 

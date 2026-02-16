@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npx vue-tsc:*)",
-      "WebFetch(domain:primevue.org)"
+      "WebFetch(domain:primevue.org)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }
