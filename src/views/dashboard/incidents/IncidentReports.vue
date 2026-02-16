@@ -60,6 +60,7 @@
             v-model="filterModel.value"
             type="text"
             placeholder="Search"
+            class="w-full"
             @input="filterCallback()"
           />
         </template>
@@ -67,9 +68,7 @@
 
       <Column field="severity" header="Severity" :showFilterMenu="false">
         <template #body="{ data }">
-          <!-- <div class="flex justify-center"> -->
           <SeverityBadge :severity="data.severity" />
-          <!-- </div> -->
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <MultiSelect
@@ -77,6 +76,7 @@
             :options="severityOptions"
             placeholder="Any"
             :maxSelectedLabels="1"
+            class="w-full"
             @change="filterCallback()"
           >
             <template #option="slotProps">
@@ -96,6 +96,7 @@
             :options="statusOptions"
             placeholder="Any"
             :maxSelectedLabels="1"
+            class="w-full"
             @change="filterCallback()"
           >
             <template #option="slotProps">
@@ -121,6 +122,7 @@
             :options="escalationOptions"
             placeholder="Any"
             :maxSelectedLabels="1"
+            class="w-full"
             @change="filterCallback()"
           >
             <template #option="slotProps">
@@ -143,6 +145,7 @@
             :options="userOptions"
             placeholder="Any"
             :maxSelectedLabels="1"
+            class="w-full"
             filter
             @change="filterCallback()"
           />
@@ -156,8 +159,12 @@
         <template #filter="{ filterModel, filterCallback }">
           <DatePicker
             v-model="filterModel.value"
+            selectionMode="range"
+            hideOnRangeSelection
+            showClear
             dateFormat="mm/dd/yy"
-            placeholder="mm/dd/yyyy"
+            placeholder="Date range"
+            class="w-full"
             @date-select="filterCallback()"
           />
         </template>
@@ -215,7 +222,7 @@ const filters = ref({
   status: { value: null, matchMode: FilterMatchMode.IN },
   escalation_level: { value: null, matchMode: FilterMatchMode.IN },
   reportedByName: { value: null, matchMode: FilterMatchMode.IN },
-  occurredDate: { value: null, matchMode: FilterMatchMode.DATE_IS },
+  occurredDate: { value: null, matchMode: FilterMatchMode.BETWEEN },
 });
 
 const severityOptions = [1, 2, 3, 4, 5, 6, 7];
