@@ -51,6 +51,10 @@ const router = createRouter({
       component: () => import("@/views/dashboard/DashboardIndex.vue"),
       children: [
         {
+          path: "",
+          component: () => import("@/views/dashboard/DashboardHome.vue"),
+        },
+        {
           path: "users",
           name: "users",
           component: () => import("@/views/dashboard/users/Users.vue"),
@@ -73,38 +77,32 @@ const router = createRouter({
             {
               path: "",
               name: "incidents",
-              component: () =>
-                import("@/views/dashboard/incidents/IncidentsDashboard.vue"),
+              component: () => import("@/views/dashboard/incidents/IncidentsDashboard.vue"),
             },
             {
               path: "reports",
               name: "incidentReports",
-              component: () =>
-                import("@/views/dashboard/incidents/IncidentReports.vue"),
+              component: () => import("@/views/dashboard/incidents/IncidentReports.vue"),
             },
             {
               path: "reports/new",
               name: "incidentReportCreate",
-              component: () =>
-                import("@/views/dashboard/incidents/IncidentReportCreate.vue"),
+              component: () => import("@/views/dashboard/incidents/IncidentReportCreate.vue"),
             },
             {
               path: "reports/:uid",
               name: "incidentReportDetail",
-              component: () =>
-                import("@/views/dashboard/incidents/IncidentReportDetail.vue"),
+              component: () => import("@/views/dashboard/incidents/IncidentReportDetail.vue"),
             },
             {
               path: "reports/:uid/edit",
               name: "incidentReportEdit",
-              component: () =>
-                import("@/views/dashboard/incidents/IncidentReportEdit.vue"),
+              component: () => import("@/views/dashboard/incidents/IncidentReportEdit.vue"),
             },
             {
               path: "types",
               name: "incidentTypes",
-              component: () =>
-                import("@/views/dashboard/incidents/IncidentTypes.vue"),
+              component: () => import("@/views/dashboard/incidents/IncidentTypes.vue"),
             },
           ],
         },
