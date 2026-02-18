@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Update user</h1>
+  <div class="p-6 md:p-12 lg:p-20 bg-surface-50 dark:bg-surface-950 h-screen">
+    <div class="mb-6 flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Update user</h1>
+    </div>
 
     <div
       class="col-span-12 lg:col-span-10 xl:col-span-8 bg-surface-0 dark:bg-surface-900 p-7 shadow rounded-2xl flex-auto"

@@ -40,6 +40,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
+      meta: { title: "Snrub Corp | Welcome" },
     },
     {
       path: "/dashboard",
@@ -49,6 +50,10 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("@/views/dashboard/DashboardIndex.vue"),
       children: [
+        {
+          path: "",
+          component: () => import("@/views/dashboard/DashboardHome.vue"),
+        },
         {
           path: "users",
           name: "users",
@@ -64,6 +69,42 @@ const router = createRouter({
           path: "users/:uid",
           name: "userUpdate",
           component: () => import("@/views/dashboard/users/UserUpdate.vue"),
+        },
+        {
+          path: "incidents",
+          component: () => import("@/views/dashboard/incidents/IncidentsIndex.vue"),
+          children: [
+            {
+              path: "",
+              name: "incidents",
+              component: () => import("@/views/dashboard/incidents/IncidentsDashboard.vue"),
+            },
+            {
+              path: "reports",
+              name: "incidentReports",
+              component: () => import("@/views/dashboard/incidents/IncidentReports.vue"),
+            },
+            {
+              path: "reports/new",
+              name: "incidentReportCreate",
+              component: () => import("@/views/dashboard/incidents/IncidentReportCreate.vue"),
+            },
+            {
+              path: "reports/:uid",
+              name: "incidentReportDetail",
+              component: () => import("@/views/dashboard/incidents/IncidentReportDetail.vue"),
+            },
+            {
+              path: "reports/:uid/edit",
+              name: "incidentReportEdit",
+              component: () => import("@/views/dashboard/incidents/IncidentReportEdit.vue"),
+            },
+            {
+              path: "types",
+              name: "incidentTypes",
+              component: () => import("@/views/dashboard/incidents/IncidentTypes.vue"),
+            },
+          ],
         },
         {
           path: "design",

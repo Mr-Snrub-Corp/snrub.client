@@ -48,6 +48,17 @@
             >
           </RouterLink>
           <RouterLink
+            :to="{ name: 'incidents' }"
+            class="w-full flex flex-row lg:flex-col items-center cursor-pointer p-2 lg:justify-center rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group lg:gap-2"
+          >
+            <i
+              class="pi pi-exclamation-triangle text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
+            />
+            <span class="ml-2 lg:ml-0 font-medium text-base lg:text-sm leading-tight lg:block"
+              >Incidents</span
+            >
+          </RouterLink>
+          <RouterLink
             :to="{ name: 'designForm' }"
             class="w-full flex flex-row lg:flex-col items-center cursor-pointer p-2 lg:justify-center rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group lg:gap-2"
           >
@@ -76,16 +87,6 @@
             />
             <span class="ml-2 lg:ml-0 font-medium text-base lg:text-sm leading-tight lg:block"
               >Events</span
-            >
-          </a>
-          <a
-            class="w-full flex flex-row lg:flex-col items-center cursor-pointer p-2 lg:justify-center rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group lg:gap-2"
-          >
-            <i
-              class="pi pi-cog text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
-            />
-            <span class="ml-2 lg:ml-0 font-medium text-base lg:text-sm leading-tight lg:block"
-              >Options</span
             >
           </a>
         </div>
@@ -150,6 +151,16 @@
               <span class="ml-2 font-medium text-base leading-tight">Team</span>
             </RouterLink>
             <RouterLink
+              :to="{ name: 'incidents' }"
+              @click="closeCallback"
+              class="w-full flex flex-row items-center cursor-pointer p-2 rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group"
+            >
+              <i
+                class="pi pi-exclamation-triangle text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
+              />
+              <span class="ml-2 font-medium text-base leading-tight">Incidents</span>
+            </RouterLink>
+            <RouterLink
               :to="{ name: 'designForm' }"
               @click="closeCallback"
               class="w-full flex flex-row items-center cursor-pointer p-2 rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group"
@@ -176,15 +187,6 @@
                 class="pi pi-calendar text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
               />
               <span class="ml-2 font-medium text-base leading-tight">Events</span>
-            </a>
-            <a
-              @click="closeCallback"
-              class="w-full flex flex-row items-center cursor-pointer p-2 rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group"
-            >
-              <i
-                class="pi pi-cog text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
-              />
-              <span class="ml-2 font-medium text-base leading-tight">Options</span>
             </a>
           </div>
           <div class="mt-auto flex flex-col pt-4 pb-6 px-4 gap-4">
@@ -237,7 +239,7 @@
       </div>
       <div
         v-else
-        class="p-8 flex flex-col flex-auto min-h-0 overflow-y-auto bg-surface-0 dark:bg-surface-950"
+        class="flex flex-col flex-auto min-h-0 overflow-y-auto bg-surface-0 dark:bg-surface-950"
       >
         <router-view />
       </div>
@@ -255,6 +257,11 @@ import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useTitle } from "@vueuse/core";
+
+const title = useTitle();
+
+title.value = "Snrub Corp | Dashboard";
 
 const router = useRouter();
 const usersStore = useUsersStore();
@@ -276,7 +283,6 @@ onBeforeMount(() => {
   isLoading.value = true;
   usersStore.fetchUsers().then(() => {
     isLoading.value = false;
-    router.push({ name: "users" });
   });
 });
 </script>

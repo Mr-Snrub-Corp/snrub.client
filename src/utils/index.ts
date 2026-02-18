@@ -10,3 +10,15 @@ export function capitalizeFirstLetter(str: string) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+export const formatTime = (dateString: string) => {
+  return new Date(dateString).toLocaleTimeString("en-US");
+};
