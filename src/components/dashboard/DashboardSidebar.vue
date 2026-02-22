@@ -7,7 +7,9 @@
       <div
         class="flex items-center justify-center shrink-0 bg-primary p-4 border-r border-primary min-h-[4.71rem]"
       >
-        <DashboardLogo />
+        <RouterLink to="/dashboard">
+          <DashboardLogo />
+        </RouterLink>
       </div>
       <div class="flex-1 p-4 flex flex-col items-center gap-2 border-r border-surface-800">
         <RouterLink
