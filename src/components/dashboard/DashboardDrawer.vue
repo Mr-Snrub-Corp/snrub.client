@@ -27,18 +27,6 @@
             />
             <span class="ml-2 font-medium text-base leading-tight">{{ item.label }}</span>
           </RouterLink>
-          <a
-            v-for="item in placeholderItems"
-            :key="item.label"
-            @click="closeCallback"
-            class="w-full flex flex-row items-center cursor-pointer p-2 rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group"
-          >
-            <i
-              :class="item.icon"
-              class="text-xl! leading-tight! text-surface-400 group-hover:text-surface-0"
-            />
-            <span class="ml-2 font-medium text-base leading-tight">{{ item.label }}</span>
-          </a>
         </div>
         <div class="mt-auto flex flex-col pt-4 pb-6 px-4 gap-4">
           <hr class="w-full border-t border-surface-800" />
@@ -59,7 +47,7 @@
 import Drawer from "primevue/drawer";
 import { RouterLink } from "vue-router";
 import DashboardLogo from "./DashboardLogo.vue";
-import { navItems, placeholderItems } from "./navItems";
+import { navItems } from "./navItems";
 
 const visible = defineModel<boolean>({ required: true });
 

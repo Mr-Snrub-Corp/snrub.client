@@ -102,6 +102,11 @@ const router = createRouter({
           component: () => import("@/views/dashboard/incidents/IncidentTypes.vue"),
         },
         {
+          path: "reporting",
+          name: "reporting",
+          component: () => import("@/views/dashboard/reporting/Reporting.vue"),
+        },
+        {
           path: "design",
           name: "design",
           component: () => import("@/views/dashboard/design/DesignIndex.vue"),

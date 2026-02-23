@@ -8,19 +8,6 @@
         <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">
           Welcome Back
         </div>
-        <div class="flex items-center">
-          <span class="text-surface-600 dark:text-surface-200 font-medium mr-1"
-            >Don't have an account?</span
-          >
-          <Button
-            as="router-link"
-            to="/signup"
-            variant="text"
-            severity="secondary"
-            class="font-medium inline-flex items-center -ml-2"
-            >Create today!</Button
-          >
-        </div>
       </div>
       <div>
         <form>
@@ -48,10 +35,7 @@
           />
 
           <div class="flex items-center justify-between mb-12">
-            <div class="flex items-center">
-              <!-- <Checkbox id="rememberme2" v-model="checked2" :binary="true" class="mr-2" />
-              <label for="rememberme2">Remember me</label> -->
-            </div>
+            <div class="flex items-center"></div>
             <Button
               class="font-medium no-underline ml-2 text-primary text-right"
               label="Forgot password?"
@@ -76,13 +60,6 @@
             @click="handleGoogleLogin"
             label="Sign in with Google"
             severity="danger"
-            icon="pi pi-google"
-            class="w-100 grow p-4 mt-2"
-          />
-          <Button
-            @click="handleSpotifyLogin"
-            label="Sign in with Spotify"
-            severity="success"
             icon="pi pi-google"
             class="w-100 grow p-4 mt-2"
           />
@@ -143,9 +120,4 @@ function handleGoogleLogin() {
   // Direct browser navigation - this will follow the 302 redirect automatically
   window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL; //  'http://localhost:8000/api/auth/google/login';
 }
-
-function handleSpotifyLogin() {
-  console.log("spotify login");
-}
-
 </script>
