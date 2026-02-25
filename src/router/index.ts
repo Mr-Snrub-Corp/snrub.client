@@ -161,7 +161,8 @@ router.beforeEach(async (to, from) => {
     !isAuthenticated &&
     // ❗️ Avoid an infinite redirect
     to.name !== "Login" &&
-    to.name !== "Forgot"
+    to.name !== "Forgot" &&
+    to.name !== "Callback"
   ) {
     // redirect the user to the login page
     return { name: "Login" };
