@@ -1,7 +1,7 @@
 <template>
-  <div class="p-6 md:p-12 lg:p-20 bg-surface-50 dark:bg-surface-950">
+  <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950">
     <!-- Header with Add User Button -->
-    <div class="mb-6 flex justify-between items-center">
+    <div class="mb-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Users</h1>
       <Button
         v-if="authStore.isAdmin"

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 md:p-12 lg:p-20 bg-surface-50 dark:bg-surface-950 h-screen overflow-y-auto">
+  <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 h-screen overflow-y-auto">
     <div v-if="isLoading" class="flex justify-center py-20">
       <ProgressSpinner />
     </div>
