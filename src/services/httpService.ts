@@ -148,6 +148,12 @@ api["auth"] = {
       method: "GET",
       headers,
     }).then((res) => handleResponse(res)),
+  getGoogleToken: () =>
+    fetch(`${baseUrl}/auth/google/token`, {
+      method: "GET",
+      headers,
+      credentials: "include",
+    }).then((res) => handleResponse(res)),
   logout: () =>
     fetch(`${baseUrl}/auth/logout`, {
       method: "POST",
