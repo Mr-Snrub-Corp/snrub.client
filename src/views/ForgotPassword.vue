@@ -29,6 +29,7 @@
         >
         <InputText
           id="email2"
+          data-testid="email-input"
           v-model="email"
           type="text"
           placeholder="Email address"
@@ -38,6 +39,7 @@
         <div class="flex items-center justify-end mb-12">
           <Button
             class="font-medium no-underline ml-2 text-primary text-right"
+            data-testid="back-to-login-btn"
             label="Back to Login"
             severity="secondary"
             variant="text"
@@ -50,6 +52,7 @@
         <Button
           @click="handleReset"
           label="Reset Password"
+          data-testid="reset-password-btn"
           severity="primary"
           icon="pi pi-user"
           class="w-full p-4"
@@ -70,7 +73,6 @@ import { useToast } from "primevue/usetoast";
 
 import { ref } from "vue";
 
-const router = useRouter();
 const authStore = useAuthStore();
 const toast = useToast();
 
@@ -92,9 +94,6 @@ function handleReset() {
         detail: "If your email is registered, you will receive a password reset link",
         life: 5000,
       });
-      //   router.push({ name: "dashboardIndex" });
     });
 }
-
-const checked2 = ref(true);
 </script>
