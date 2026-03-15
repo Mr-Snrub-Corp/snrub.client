@@ -100,16 +100,17 @@ jobs:
           curl --fail --silent http://localhost:8000/docs > /dev/null || (echo "API failed to start" && exit 1)
         working-directory: snrub.api
 
-      # --- Build & run E2E tests ---
-      - name: Build frontend
-        run: npm run build-only
-        env:
-          VITE_API_URL: http://localhost:8000/api
-
+      # --- Run E2E tests ---
+      # Uses the Vite dev server (port 5173) instead of preview server (port 4173)
+      # to match the API's CORS allowed origin. Marginally slower than preview but
+      # avoids a cross-repo CORS change. Won't catch Vite build-specific bugs, but
+      # the test-and-build workflow already validates the production build.
+      # TODO: make API CORS origins env-configurable, then switch to preview server.
       - name: Run Playwright tests
         run: npx playwright test --project=chromium
         env:
           CI: true
+          VITE_API_URL: http://localhost:8000/api
           E2E_TEST_USER_EMAIL: w.smithers@snrub-corp.io
           E2E_TEST_USER_PASSWORD: P@ssw0rd!
 
