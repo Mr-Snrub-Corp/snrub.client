@@ -4,10 +4,10 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
-import { type User } from "@/types/user";
-import { nextTick, onMounted } from "vue";
+import api from "@/services/httpService";
+import type { AuthResponse } from "@/types/auth";
+import { onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { jwtDecode } from "jwt-decode";
 import { useToast } from "primevue/usetoast";
 
 const authStore = useAuthStore();
@@ -16,27 +16,36 @@ const router = useRouter();
 const toast = useToast();
 
 onMounted(async () => {
-  const hashParams = new URLSearchParams(route.hash.substring(1));
-  const token = hashParams.get("token");
+  if (route.query.error) {
+    toast.add({
+      severity: "error",
+      summary: "Login Failed",
+      detail: "Google authentication failed. Please try again.",
+      life: 5000,
+    });
+    router.push({ name: "Login" });
+    return;
+  }
 
-  if (token) {
-    const userData = jwtDecode<User>(token);
-    authStore.setToken(token);
-    authStore.setUser(userData);
-    await nextTick();
-    router
-      .push({ name: "dashboardHome" })
-      .then(() => {
-        toast.add({
-          severity: "success",
-          summary: "Welcome",
-          detail: "Welcome to Snrub Corp dashboard. You are logged in as a guest.",
-          life: 5000,
-        });
-      })
-      .catch((err) => {
-        console.error("Navigation failed:", err);
-      });
+  try {
+    const data = (await api.auth.getGoogleToken()) as AuthResponse;
+    authStore.setToken(data.access_token);
+    authStore.setUser(data.user);
+    await router.push({ name: "dashboardHome" });
+    toast.add({
+      severity: "success",
+      summary: "Welcome",
+      detail: "Welcome to Snrub Corp dashboard. You are logged in as a guest.",
+      life: 5000,
+    });
+  } catch {
+    toast.add({
+      severity: "error",
+      summary: "Login Failed",
+      detail: "Could not retrieve authentication token. Please try again.",
+      life: 5000,
+    });
+    router.push({ name: "Login" });
   }
 });
 </script>

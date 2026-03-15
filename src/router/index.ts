@@ -25,12 +25,12 @@ const router = createRouter({
           name: "Callback",
           component: () => import("@/views/auth/AuthCallback.vue"),
         },
+        {
+          path: "reset-password",
+          name: "resetPassword",
+          component: () => import("@/views/auth/ResetPassword.vue"),
+        },
       ],
-    },
-    {
-      path: "/reset-password",
-      name: "resetPassword",
-      component: () => import("@/views/ResetPassword.vue"),
     },
     { path: "/signup", name: "signup", component: () => import("@/views/Signup.vue") },
 

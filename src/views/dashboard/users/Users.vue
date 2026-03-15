@@ -6,13 +6,18 @@
       <Button
         v-if="authStore.isAdmin"
         label="Add User"
+        data-testid="add-user-btn"
         icon="pi pi-plus"
         @click="router.push({ name: 'userNew' })"
         severity="primary"
       />
     </div>
 
-    <DataTable :value="allUsers" class="shadow-sm rounded-2xl overflow-hidden">
+    <DataTable
+      data-testid="users-table"
+      :value="allUsers"
+      class="shadow-sm rounded-2xl overflow-hidden"
+    >
       <Column field="photo" header="Photo">
         <template #body="slotProps">
           <Avatar
@@ -33,6 +38,7 @@
             <Button
               v-if="authStore.isSuperAdmin"
               icon="pi pi-trash"
+              data-testid="delete-user-btn"
               @click="handleShowDeleteDialog(slotProps.data.uid)"
               severity="secondary"
               variant="text"

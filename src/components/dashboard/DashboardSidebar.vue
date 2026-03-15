@@ -16,6 +16,7 @@
           v-for="item in navItems"
           :key="item.label"
           :to="item.to"
+          :data-testid="item.testId"
           class="w-full flex flex-row lg:flex-col items-center cursor-pointer p-2 lg:justify-center rounded-lg text-surface-400 border border-transparent hover:bg-surface-800 hover:border-surface-700 hover:text-surface-0 transition-colors duration-150 group lg:gap-2"
         >
           <i
@@ -33,6 +34,7 @@
           @click="$emit('logout')"
           class="cursor-pointer inline-flex items-center justify-center text-surface-400 hover:text-surface-0 transition-colors duration-150"
           title="Logout"
+          data-testid="sidebar-logout-btn"
         >
           <i class="pi pi-sign-out text-xl" />
         </a>

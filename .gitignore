@@ -35,3 +35,4 @@ playwright-report/
 .env
 .env.development
 .env.production
+.env.e2e
