@@ -2,13 +2,13 @@
   <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950">
     <!-- Header with Add User Button -->
     <div class="mb-4 flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Users</h1>
+      <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Team</h1>
       <Button
         v-if="authStore.isAdmin"
         label="Add User"
         data-testid="add-user-btn"
         icon="pi pi-plus"
-        @click="router.push({ name: 'userNew' })"
+        @click="router.push({ name: 'teamMemberCreate' })"
         severity="primary"
       />
     </div>
@@ -45,8 +45,9 @@
               rounded
             />
             <Button
-              :icon="actionIcon"
-              @click="router.push({ name: 'userUpdate', params: { uid: slotProps.data.uid } })"
+              icon="pi pi-eye"
+              data-testid="view-user-btn"
+              @click="router.push({ name: 'teamMemberDetail', params: { uid: slotProps.data.uid } })"
               severity="secondary"
               variant="text"
               rounded
@@ -91,7 +92,7 @@ import DeleteConfirmDialog from "@/components/dialogs/DeleteConfirmDialog.vue";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import type { MenuItem } from "primevue/menuitem";
 
 const router = useRouter();
@@ -101,14 +102,6 @@ const allUsers = usersStore.getAllUsers;
 
 const showDeleteConfirmDialog = ref(false);
 const selectedUserUid = ref<string | null>(null);
-
-// Determine which icon to show based on logged-in user's role
-const actionIcon = computed(() => {
-  if (authStore.isAdmin) {
-    return "pi pi-pencil";
-  }
-  return "pi pi-eye";
-});
 
 // Popup action menu
 const actionMenuRef = ref<InstanceType<typeof Menu>>();
@@ -126,9 +119,9 @@ function toggleActionMenu(event: Event, rowData: { uid: string }) {
         ]
       : []),
     {
-      label: authStore.isAdmin ? "Edit" : "View",
-      icon: actionIcon.value,
-      command: () => router.push({ name: "userUpdate", params: { uid: rowData.uid } }),
+      label: "View",
+      icon: "pi pi-eye",
+      command: () => router.push({ name: "teamMemberDetail", params: { uid: rowData.uid } }),
     },
   ];
   actionMenuRef.value?.toggle(event);

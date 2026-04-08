@@ -8,7 +8,7 @@
 
     <div class="bg-surface-0 dark:bg-surface-900 p-7 shadow rounded-2xl flex-auto xl:w-3/4">
       <div class="flex flex-col gap-7">
-        <div class="text-surface-900 dark:text-surface-0 font-semibold text-base">Details</div>
+        <div class="text-xl font-medium text-surface-900 dark:text-surface-0">Details</div>
 
         <div class="flex flex-col gap-6 ">
           <!-- Incident Type -->
@@ -91,7 +91,7 @@
         <!-- Subjects -->
         <div class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <div class="text-surface-900 dark:text-surface-0 font-semibold text-base">Subjects</div>
+            <div class="text-xl font-medium text-surface-900 dark:text-surface-0">Subjects</div>
             <Button
               v-if="!showAddSubject"
               label="Add Subject"

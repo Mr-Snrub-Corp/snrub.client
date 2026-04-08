@@ -103,12 +103,12 @@ describe("DashboardNavbar", () => {
     mockRoute.path = "/dashboard";
   });
 
-  it("builds 1 breadcrumb item for /dashboard/users", () => {
-    mockRoute.path = "/dashboard/users";
+  it("builds 1 breadcrumb item for /dashboard/team", () => {
+    mockRoute.path = "/dashboard/team";
     const wrapper = mountNavbar();
     const bc = wrapper.findComponent(BreadcrumbStub);
     const model = bc.props("model");
-    expect(model).toEqual([{ label: "Users" }]);
+    expect(model).toEqual([{ label: "Team" }]);
     mockRoute.path = "/dashboard";
   });
 

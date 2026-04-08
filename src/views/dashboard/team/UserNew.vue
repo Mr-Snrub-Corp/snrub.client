@@ -5,10 +5,10 @@
     </div>
 
     <div
-      class="col-span-12 lg:col-span-10 xl:col-span-8 bg-surface-0 dark:bg-surface-900 p-7 shadow rounded-2xl flex-auto"
+      class="bg-surface-0 dark:bg-surface-900 p-7 shadow rounded-2xl flex-auto xl:w-3/4"
     >
       <div class="flex flex-col gap-7">
-        <div class="text-surface-900 dark:text-surface-0 font-semibold text-base">
+        <div class="text-xl font-medium text-surface-900 dark:text-surface-0">
           User Information
         </div>
 
@@ -209,13 +209,13 @@ async function handleSubmit() {
 
   try {
     await usersStore.createUser(formData.value);
-    router.push({ name: "users" });
+    router.push({ name: "team" });
   } catch (error) {
     console.error("Error creating user:", error);
   }
 }
 
 function handleCancel() {
-  router.push({ name: "users" });
+  router.push({ name: "team" });
 }
 </script>

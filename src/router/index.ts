@@ -54,20 +54,25 @@ const router = createRouter({
           component: () => import("@/views/dashboard/DashboardHome.vue"),
         },
         {
-          path: "users",
-          name: "users",
-          component: () => import("@/views/dashboard/users/Users.vue"),
+          path: "team",
+          name: "team",
+          component: () => import("@/views/dashboard/team/Users.vue"),
         },
         {
-          path: "users/new",
-          name: "userNew",
-          component: () => import("@/views/dashboard/users/UserNew.vue"),
+          path: "team/new",
+          name: "teamMemberCreate",
+          component: () => import("@/views/dashboard/team/UserNew.vue"),
           meta: { requiresSuperAdmin: true },
         },
         {
-          path: "users/:uid",
-          name: "userUpdate",
-          component: () => import("@/views/dashboard/users/UserUpdate.vue"),
+          path: "team/:uid",
+          name: "teamMemberDetail",
+          component: () => import("@/views/dashboard/team/UserDetail.vue"),
+        },
+        {
+          path: "team/:uid/edit",
+          name: "teamMemberEdit",
+          component: () => import("@/views/dashboard/team/UserEdit.vue"),
         },
         {
           path: "incidents",
@@ -169,7 +174,7 @@ router.beforeEach(async (to) => {
 
   // Role-based access control
   if (to.meta.requiresSuperAdmin && !authStore.isSuperAdmin) {
-    return { name: "users" };
+    return { name: "team" };
   }
 });
 

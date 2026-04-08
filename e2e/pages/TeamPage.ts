@@ -12,17 +12,21 @@ export class TeamPage {
   constructor(page: Page) {
     this.page = page;
     this.sidebar = new DashboardSidebar(page);
-    this.heading = page.getByRole("heading", { name: "Users", level: 1 });
+    this.heading = page.getByRole("heading", { name: "Team", level: 1 });
     this.addUserButton = page.getByTestId("add-user-btn");
     this.usersTable = page.getByTestId("users-table");
     this.deleteConfirmDialog = page.getByRole("dialog");
   }
 
   async goto() {
-    await this.page.goto("/dashboard/users");
+    await this.page.goto("/dashboard/team");
   }
 
   getDeleteButton(rowIndex: number) {
     return this.usersTable.getByTestId("delete-user-btn").nth(rowIndex);
+  }
+
+  getViewButton(rowIndex: number) {
+    return this.usersTable.getByTestId("view-user-btn").nth(rowIndex);
   }
 }
