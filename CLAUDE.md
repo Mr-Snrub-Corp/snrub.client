@@ -21,7 +21,7 @@ There is a shared/ folder adjacent to this repo and it contains an openapi.json 
 - PrimeVue (theme: "none", styled via tailwindcss-primeui plugin)
 - Tailwind CSS v3
 - Pinia for state management
-- Playwright for e2e tests
+- Playwright for e2e tests (tests live in `Mr-Snrub-Corp/snrub.e2e`, not this repo)
 
 ## Styling
 
@@ -46,6 +46,13 @@ There is a shared/ folder adjacent to this repo and it contains an openapi.json 
 
 ## Testing
 
-- Unit tests sit beside the file: `[Name].unit.spec.js`
+### Unit tests
+- Sit beside the file: `[Name].unit.spec.js`
 - Use `@vue/test-utils`
 - Quality over quantity
+
+### E2E tests
+- Live in `Mr-Snrub-Corp/snrub.e2e` — do not add Playwright tests or config to this repo
+- On PR, `.github/workflows/e2e.yml` dispatches a `client-pr` event to `snrub.e2e` with the branch name
+- Results are visible in the `snrub.e2e` Actions tab, not as a status check on the client PR
+- TODO: report E2E result back to the client PR via GitHub commit status API

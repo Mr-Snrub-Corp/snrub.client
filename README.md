@@ -38,51 +38,13 @@ npm run build
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
+### End-to-End Tests
 
-E2E tests run against the real API — no mocks.
+E2E tests live in [`Mr-Snrub-Corp/snrub.e2e`](https://github.com/Mr-Snrub-Corp/snrub.e2e) — not this repo. This allows the same test suite to run against the Vue, React, and Angular versions of the app.
 
-**Prerequisites:**
+On pull request, `.github/workflows/e2e.yml` dispatches a `client-pr` event to `snrub.e2e` with the branch name. Results appear in the `snrub.e2e` Actions tab.
 
-1. Install Playwright browsers (first time only):
-
-```sh
-npx playwright install
-```
-
-2. Start the API stack (from the `snrub.api` repo):
-
-```sh
-docker compose up
-```
-
-3. Create `.env.e2e` in the project root (gitignored):
-
-```
-E2E_TEST_USER_EMAIL=w.smithers@snrub-corp.io
-E2E_TEST_USER_PASSWORD=<seed user password>
-```
-
-**Running tests:**
-
-```sh
-# All browsers
-npm run test:e2e
-
-# Chromium only (fastest)
-npm run test:e2e -- --project=chromium
-
-# Specific file
-npm run test:e2e -- e2e/auth.spec.ts
-
-# Debug mode (headed, step through)
-npm run test:e2e -- --debug
-
-# Show HTML report after run
-npx playwright show-report
-```
-
-Tests use the [Page Object Model](https://playwright.dev/docs/pom) pattern — page classes live in `e2e/pages/`.
+> **TODO:** report E2E pass/fail back to the client PR via the GitHub commit status API.
 
 ### Lint with [ESLint](https://eslint.org/)
 
