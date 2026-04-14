@@ -29,3 +29,5 @@ coverage
 .env
 .env.development
 .env.production
+
+test-results/

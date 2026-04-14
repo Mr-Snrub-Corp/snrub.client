@@ -119,6 +119,7 @@ function generateApi(endpoint: string) {
 
 api.incidentTypes = generateApi("incident-types");
 api.incidentReports = generateApi("incident-reports");
+api.incidentCategories = generateApi("incident-categories");
 
 // Extend users API with photo-specific endpoints
 api.users = {
