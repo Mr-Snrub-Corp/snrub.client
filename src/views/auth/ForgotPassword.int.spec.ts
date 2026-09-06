@@ -64,7 +64,7 @@ describe("ForgotPassword (integration)", () => {
           severity: "success",
           summary: "Email Sent",
           detail: "If your email is registered, you will receive a password reset link",
-          life: 5000,
+          life: 3000,
         }),
       ),
     );
@@ -120,7 +120,7 @@ describe("ForgotPassword (integration)", () => {
           severity: "error",
           summary: "Error",
           detail: "Something went wrong. Please try again later.",
-          life: 5000,
+          life: 3000,
         }),
       ),
     );

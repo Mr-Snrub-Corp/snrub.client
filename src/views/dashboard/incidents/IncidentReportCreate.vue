@@ -145,6 +145,7 @@ import FormField from "@/components/form/FormField.vue";
 import PageShell from "@/components/layout/PageShell.vue";
 import type { IncidentReportSubjectCreate } from "@/types/incidentReport";
 import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 
 const router = useRouter();
 const toast = useToast();
@@ -205,16 +206,15 @@ async function handleSubmit() {
       severity: "success",
       summary: "Success",
       detail: "Incident report created",
-      life: 3000,
+      life: TOAST_LIFE,
     });
     router.push({ name: "incidentReportDetail", params: { uid: response.uid } });
-  } catch (error) {
-    console.error("Error creating incident report:", error);
+  } catch {
     toast.add({
       severity: "error",
       summary: "Error",
       detail: "Something went wrong creating incident report",
-      life: 3000,
+      life: TOAST_LIFE,
     });
   }
 }

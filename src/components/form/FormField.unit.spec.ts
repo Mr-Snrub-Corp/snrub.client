@@ -52,6 +52,19 @@ describe("FormField", () => {
     );
   });
 
+  it("renders a label-append slot beside the label", async () => {
+    const { wrapper } = await renderField(
+      {},
+      {
+        default: '<input id="email" />',
+        "label-append": '<button type="button">Toggle</button>',
+      },
+    );
+
+    expect(wrapper.get("label").attributes("for")).toBe("email");
+    expect(wrapper.get("button").text()).toBe("Toggle");
+  });
+
   it("uses a custom label class when provided", async () => {
     const { wrapper } = await renderField({
       labelClass: "block text-surface-900 font-medium",

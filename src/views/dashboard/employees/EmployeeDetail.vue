@@ -86,7 +86,7 @@ import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useUsersStore } from "@/stores/users";
-import { formatLabel } from "@/utils";
+import { formatLabel, navigateBack } from "@/utils";
 import { getUserStatusSeverity, getUserAvatar as buildUserAvatar } from "@/utils/user";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
@@ -107,11 +107,7 @@ const user = computed(() => usersStore.getUserById(uid));
 const getUserAvatar = computed(() => buildUserAvatar(user.value?.photo));
 
 function handleGoBack() {
-  if (window.history.state.back) {
-    router.back();
-  } else {
-    router.push({ name: "employeeEdit", params: { uid: user.value?.uid } });
-  }
+  navigateBack(router, { name: "employees" });
 }
 
 onMounted(async () => {

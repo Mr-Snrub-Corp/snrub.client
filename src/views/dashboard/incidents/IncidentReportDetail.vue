@@ -107,7 +107,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
 import { useIncidentTypeLookup } from "@/composables/useIncidentTypeLookup";
 import { useUserLookup } from "@/composables/useUserLookup";
-import { formatDate, formatTime, formatLabel } from "@/utils";
+import { formatDate, formatTime, formatLabel, navigateBack } from "@/utils";
 import { getTagSeverity, getEscalationSeverity } from "@/utils/incident";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
@@ -136,13 +136,7 @@ const reportedByName = computed(() =>
 );
 
 function handleGoBack() {
-  // Check if a previous history entry exists within the current session
-  if (window.history.state.back) {
-    router.back(); // Equivalent to router.go(-1)
-  } else {
-    // Fallback: if no history exists, redirect to a specific page (e.g., home)
-    router.push({ name: "incidentReports" });
-  }
+  navigateBack(router, { name: "incidentReports" });
 }
 
 onMounted(async () => {

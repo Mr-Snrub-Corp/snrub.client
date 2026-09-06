@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col gap-2">
-    <label :for="inputId" :class="labelClass">{{ label }}</label>
+    <div v-if="$slots['label-append']" class="flex justify-between items-center w-full">
+      <label :for="inputId" :class="labelClass">{{ label }}</label>
+      <slot name="label-append" />
+    </div>
+    <label v-else :for="inputId" :class="labelClass">{{ label }}</label>
     <slot />
     <small v-if="field.$error" :id="errorId" class="text-red-500">
       {{ field.$errors[0]?.$message }}

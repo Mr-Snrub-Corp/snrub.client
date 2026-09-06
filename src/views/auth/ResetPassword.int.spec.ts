@@ -104,7 +104,7 @@ describe("ResetPassword (integration)", () => {
     expect(wrapper.text()).toContain("Passwords must match");
   });
 
-  it("does not show success toast or leave the page on a 400", async () => {
+  it("shows an error toast and stays on the page on a 400", async () => {
     server.use(
       http.post(`${API}/auth/reset-password`, () =>
         HttpResponse.json({ detail: "Invalid token" }, { status: 400 }),
@@ -114,14 +114,22 @@ describe("ResetPassword (integration)", () => {
 
     await submitValidPassword(wrapper);
 
-    expect(add).not.toHaveBeenCalled();
+    expect(add).toHaveBeenCalledWith(
+      expect.objectContaining({ severity: "error", summary: "Error" }),
+    );
     expect(router.currentRoute.value.name).toBe("resetPassword");
   });
 
-  it("submit button renders and is accessible", async () => {
+  it("submit button is disabled until the form is valid", async () => {
     const { wrapper } = await renderReset();
 
     const btn = wrapper.find(`[data-testid="${SUBMIT_BTN}"]`);
-    expect(btn.exists()).toBe(true);
+    expect(btn.attributes("disabled")).toBeDefined();
+
+    await wrapper.find(`[data-testid="${PASSWORD}"]`).setValue(VALID_PASSWORD);
+    await wrapper.find(`[data-testid="${CONFIRM}"]`).setValue(VALID_PASSWORD);
+    await flushPromises();
+
+    expect(wrapper.find(`[data-testid="${SUBMIT_BTN}"]`).attributes("disabled")).toBeUndefined();
   });
 });

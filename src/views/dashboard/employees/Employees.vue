@@ -98,12 +98,15 @@ import { photoToDataUrl } from "@/utils/user";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 import { computed, ref } from "vue";
 import type { MenuItem } from "primevue/menuitem";
 
 const router = useRouter();
 const usersStore = useUsersStore();
 const authStore = useAuthStore();
+const toast = useToast();
 const allUsers = computed(() => usersStore.getAllUsers);
 const showDeleteConfirmDialog = ref(false);
 const selectedUserUid = ref<string | null>(null);
@@ -137,11 +140,19 @@ function handleShowDeleteDialog(userUid: string) {
   selectedUserUid.value = userUid;
 }
 
-// Methods
-function handleDelete() {
+async function handleDelete() {
   showDeleteConfirmDialog.value = false;
-  if (selectedUserUid.value) {
-    usersStore.deleteUser(selectedUserUid.value);
+  if (!selectedUserUid.value) return;
+
+  try {
+    await usersStore.deleteUser(selectedUserUid.value);
+  } catch {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Something went wrong. Please try again later.",
+      life: TOAST_LIFE,
+    });
   }
 }
 </script>

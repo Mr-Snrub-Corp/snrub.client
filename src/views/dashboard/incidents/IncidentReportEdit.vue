@@ -153,6 +153,7 @@ import type {
   IncidentReportSubjectCreate,
 } from "@/types/incidentReport";
 import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 
 const route = useRoute();
 const router = useRouter();
@@ -240,16 +241,15 @@ async function handleSubmit() {
       severity: "success",
       summary: "Success",
       detail: "Incident report has been successfully updated",
-      life: 3000,
+      life: TOAST_LIFE,
     });
     router.push({ name: "incidentReportDetail", params: { uid } });
-  } catch (error) {
-    console.error("Error updating incident report:", error);
+  } catch {
     toast.add({
       severity: "error",
       summary: "Error",
       detail: "Something went wrong with incident report update",
-      life: 3000,
+      life: TOAST_LIFE,
     });
   }
 }
