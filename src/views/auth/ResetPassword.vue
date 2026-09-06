@@ -19,103 +19,88 @@
         </div>
       </div>
       <form @submit.prevent="handleReset" class="flex flex-col gap-6 w-full">
-        <div class="flex flex-col gap-2 w-full">
-          <div class="flex flex-col gap-2 w-full">
-            <div class="flex justify-between w-full">
-              <label
-                for="password"
-                class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
-                >New password</label
-              >
-              <!-- <span role="button" class="p-button-text cursor-pointer"
-                ></i
-              ></span> -->
-              <Button
-                type="button"
-                class="p-0"
-                severity="secondary"
-                variant="text"
-                rounded
-                aria-label="Toggle new password visibility"
-                @click="togglePasswordVisibility('passwordType')"
-                ><i
-                  :class="[
-                    'pi',
-                    {
-                      'pi-eye': passwordType === 'password',
-                      'pi-eye-slash': passwordType === 'text',
-                    },
-                  ]"
-                  aria-hidden="true"
-                ></i
-              ></Button>
-            </div>
-            <InputText
-              id="password"
-              data-testid="auth.reset-password-form.password-input"
-              :type="passwordType"
-              v-model="password"
-              placeholder="Enter new password"
-              class="w-full px-3 py-2 shadow-sm rounded-lg"
-              :aria-invalid="v$.password.$invalid"
-              :aria-describedby="v$.password.$invalid ? 'password-error' : undefined"
-            />
-            <Message
-              v-if="v$.password.$invalid"
-              id="password-error"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ v$.password.$errors[0]?.$message }}</Message
-            >
-          </div>
-          <div class="flex flex-col gap-2 w-full">
-            <div class="flex justify-between w-full">
-              <label
-                for="confirmPassword"
-                class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
-                >Confirm Password</label
-              >
-              <Button
-                type="button"
-                class="p-0"
-                severity="secondary"
-                variant="text"
-                rounded
-                aria-label="Toggle confirm password visibility"
-                @click="togglePasswordVisibility('confirmPasswordType')"
-                ><i
-                  :class="[
-                    'pi',
-                    {
-                      'pi-eye': confirmPasswordType === 'password',
-                      'pi-eye-slash': confirmPasswordType === 'text',
-                    },
-                  ]"
-                  aria-hidden="true"
-                ></i
-              ></Button>
-            </div>
-            <InputText
-              id="confirmPassword"
-              data-testid="auth.reset-password-form.confirm-password-input"
-              :type="confirmPasswordType"
-              v-model="confirmPassword"
-              placeholder="Confirm password"
-              class="w-full px-3 py-2 shadow-sm rounded-lg"
-              :aria-invalid="v$.confirmPassword.$invalid"
-              :aria-describedby="v$.confirmPassword.$invalid ? 'confirmPassword-error' : undefined"
-            />
-            <Message
-              v-if="v$.confirmPassword.$invalid"
-              id="confirmPassword-error"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ v$.confirmPassword.$errors[0]?.$message }}</Message
-            >
-          </div>
-        </div>
+        <FormField
+          label="New password"
+          input-id="password"
+          error-id="password-error"
+          :field="v$.password"
+          label-class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+        >
+          <template #label-append>
+            <Button
+              type="button"
+              class="p-0"
+              severity="secondary"
+              variant="text"
+              rounded
+              aria-label="Toggle new password visibility"
+              @click="togglePasswordVisibility('passwordType')"
+              ><i
+                :class="[
+                  'pi',
+                  {
+                    'pi-eye': passwordType === 'password',
+                    'pi-eye-slash': passwordType === 'text',
+                  },
+                ]"
+                aria-hidden="true"
+              ></i
+            ></Button>
+          </template>
+          <InputText
+            id="password"
+            data-testid="auth.reset-password-form.password-input"
+            :type="passwordType"
+            v-model="password"
+            placeholder="Enter new password"
+            class="w-full px-3 py-2 shadow-sm rounded-lg"
+            :invalid="v$.password.$error"
+            :aria-invalid="v$.password.$error"
+            :aria-describedby="v$.password.$error ? 'password-error' : undefined"
+            @blur="v$.password.$touch()"
+          />
+        </FormField>
+        <FormField
+          label="Confirm Password"
+          input-id="confirmPassword"
+          error-id="confirmPassword-error"
+          :field="v$.confirmPassword"
+          label-class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+        >
+          <template #label-append>
+            <Button
+              type="button"
+              class="p-0"
+              severity="secondary"
+              variant="text"
+              rounded
+              aria-label="Toggle confirm password visibility"
+              @click="togglePasswordVisibility('confirmPasswordType')"
+              ><i
+                :class="[
+                  'pi',
+                  {
+                    'pi-eye': confirmPasswordType === 'password',
+                    'pi-eye-slash': confirmPasswordType === 'text',
+                  },
+                ]"
+                aria-hidden="true"
+              ></i
+            ></Button>
+          </template>
+          <InputText
+            id="confirmPassword"
+            data-testid="auth.reset-password-form.confirm-password-input"
+            :type="confirmPasswordType"
+            v-model="confirmPassword"
+            placeholder="Confirm password"
+            class="w-full px-3 py-2 shadow-sm rounded-lg"
+            :invalid="v$.confirmPassword.$error"
+            :aria-invalid="v$.confirmPassword.$error"
+            :aria-describedby="v$.confirmPassword.$error ? 'confirmPassword-error' : undefined"
+            @blur="v$.confirmPassword.$touch()"
+          />
+        </FormField>
         <Button
           data-testid="auth.reset-password-form.submit-btn"
           type="submit"
@@ -123,6 +108,7 @@
           severity="primary"
           icon="pi pi-user"
           class="w-full py-2 rounded-lg flex justify-center items-center gap-2"
+          :disabled="v$.$invalid"
         >
           <template #icon>
             <i class="pi pi-user !text-base !leading-normal" aria-hidden="true" />
@@ -136,10 +122,11 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
 import DashboardLogo from "@/components/dashboard/DashboardLogo.vue";
+import FormField from "@/components/form/FormField.vue";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import Message from "primevue/message";
 import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -194,14 +181,19 @@ async function handleReset() {
       severity: "success",
       summary: "Success",
       detail: "Password has been reset",
-      life: 3000,
+      life: TOAST_LIFE,
     });
     // Redirect to login page after successful reset
     setTimeout(() => {
       router.push("/auth/login");
     }, 1000);
-  } catch (error) {
-    console.error("Password reset failed:", error);
+  } catch {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Something went wrong. Please try again later.",
+      life: TOAST_LIFE,
+    });
   }
 }
 </script>

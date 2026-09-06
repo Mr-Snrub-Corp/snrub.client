@@ -86,6 +86,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 import { emailRules } from "@/constants/validation";
+import { TOAST_LIFE } from "@/constants/toast";
 
 const authStore = useAuthStore();
 const toast = useToast();
@@ -108,15 +109,14 @@ async function handleReset() {
       severity: "success",
       summary: "Email Sent",
       detail: "If your email is registered, you will receive a password reset link",
-      life: 5000,
+      life: TOAST_LIFE,
     });
-  } catch (error) {
-    console.error("Reset failed:", error);
+  } catch {
     toast.add({
       severity: "error",
       summary: "Error",
       detail: "Something went wrong. Please try again later.",
-      life: 5000,
+      life: TOAST_LIFE,
     });
   }
 }

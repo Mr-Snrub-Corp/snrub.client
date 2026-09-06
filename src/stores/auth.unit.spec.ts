@@ -11,6 +11,7 @@ vi.mock("@/services/httpService", () => ({
     auth: {
       login: vi.fn(),
       loginGoogle: vi.fn(),
+      getGoogleToken: vi.fn(),
       logout: vi.fn(),
       requestPasswordReset: vi.fn(),
       resetPassword: vi.fn(),
@@ -147,6 +148,19 @@ describe("useAuthStore", () => {
       expect(store.user).toEqual(mockAdminUser);
       expect(store.token).toEqual(mockToken);
       expect(api.auth.login).toHaveBeenCalledWith(mockLoginCredentials);
+    });
+  });
+
+  describe("loginGoogle", () => {
+    it("sets user and token from the Google token endpoint", async () => {
+      vi.mocked(api.auth.getGoogleToken).mockResolvedValue(mockAuthResponse);
+
+      const store = useAuthStore();
+      await store.loginGoogle();
+
+      expect(store.user).toEqual(mockAdminUser);
+      expect(store.token).toEqual(mockToken);
+      expect(api.auth.getGoogleToken).toHaveBeenCalled();
     });
   });
 

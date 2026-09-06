@@ -7,11 +7,10 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
-import api from "@/services/httpService";
-import type { AuthResponse } from "@/types/auth";
 import { onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 
 const authStore = useAuthStore();
 const route = useRoute();
@@ -24,29 +23,27 @@ onMounted(async () => {
       severity: "error",
       summary: "Login Failed",
       detail: "Google authentication failed. Please try again.",
-      life: 5000,
+      life: TOAST_LIFE,
     });
     router.push({ name: "Login" });
     return;
   }
 
   try {
-    const data = (await api.auth.getGoogleToken()) as AuthResponse;
-    authStore.setToken(data.access_token);
-    authStore.setUser(data.user);
+    await authStore.loginGoogle();
     await router.push({ name: "dashboardHome" });
     toast.add({
       severity: "success",
       summary: "Welcome",
       detail: "Welcome to Snrub Corp dashboard. You are logged in as a guest.",
-      life: 5000,
+      life: TOAST_LIFE,
     });
   } catch {
     toast.add({
       severity: "error",
       summary: "Login Failed",
       detail: "Could not retrieve authentication token. Please try again.",
-      life: 5000,
+      life: TOAST_LIFE,
     });
     router.push({ name: "Login" });
   }

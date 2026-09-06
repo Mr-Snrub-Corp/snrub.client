@@ -136,6 +136,7 @@ import FormField from "@/components/form/FormField.vue";
 import PageShell from "@/components/layout/PageShell.vue";
 import { useUsersStore } from "@/stores/users";
 import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 
 const toast = useToast();
 const router = useRouter();
@@ -181,13 +182,12 @@ async function handleSubmit() {
   try {
     const user = await usersStore.createUser(formData.value);
     router.push({ name: "employeeDetail", params: { uid: user.uid } });
-  } catch (error) {
-    console.error("Error creating user:", error);
+  } catch {
     toast.add({
       severity: "error",
       summary: "Error",
       detail: "Something went wrong. Please try again later.",
-      life: 3000,
+      life: TOAST_LIFE,
     });
   }
 }

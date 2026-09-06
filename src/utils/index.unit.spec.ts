@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { formatLabel, capitalizeFirstLetter, timeAgo, enumToSelectOptions } from "./index";
+import type { Router } from "vue-router";
+import {
+  formatLabel,
+  capitalizeFirstLetter,
+  timeAgo,
+  enumToSelectOptions,
+  navigateBack,
+} from "./index";
 
 describe("capitalizeFirstLetter", () => {
   it("capitalizes the first letter of a lowercase word", () => {
@@ -76,6 +83,29 @@ describe("enumToSelectOptions", () => {
 
   it("returns an empty array for an empty enum object", () => {
     expect(enumToSelectOptions({})).toEqual([]);
+  });
+});
+
+describe("navigateBack", () => {
+  const router = { back: vi.fn(), push: vi.fn() } as unknown as Router;
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("calls router.back when a previous history entry exists", () => {
+    vi.stubGlobal("history", { state: { back: "/dashboard/employees" } });
+    navigateBack(router, { name: "employees" });
+    expect(router.back).toHaveBeenCalled();
+    expect(router.push).not.toHaveBeenCalled();
+  });
+
+  it("pushes the fallback when there is no previous history entry", () => {
+    vi.stubGlobal("history", { state: {} });
+    navigateBack(router, { name: "employees" });
+    expect(router.push).toHaveBeenCalledWith({ name: "employees" });
+    expect(router.back).not.toHaveBeenCalled();
   });
 });
 

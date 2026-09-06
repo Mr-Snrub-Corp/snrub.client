@@ -166,6 +166,7 @@ import PageShell from "@/components/layout/PageShell.vue";
 import { getUserAvatar as buildUserAvatar } from "@/utils/user";
 import type { UserRole, UserStatus } from "@/types/user";
 import { useToast } from "primevue/usetoast";
+import { TOAST_LIFE } from "@/constants/toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -246,15 +247,14 @@ async function onPhotoSelect(event: FileUploadSelectEvent) {
       severity: "success",
       summary: "Success",
       detail: "Photo has been successfully uploaded",
-      life: 3000,
+      life: TOAST_LIFE,
     });
-  } catch (err) {
-    console.error(err);
+  } catch {
     toast.add({
       severity: "error",
       summary: "Error",
       detail: "Something went wrong with photo upload",
-      life: 3000,
+      life: TOAST_LIFE,
     });
   } finally {
     isUploadingImage.value = false;
@@ -277,16 +277,15 @@ async function handleSubmit() {
       severity: "success",
       summary: "Success",
       detail: "Employee has been successfully updated",
-      life: 3000,
+      life: TOAST_LIFE,
     });
     router.push({ name: "employeeDetail", params: { uid } });
-  } catch (error) {
-    console.error("Error updating user:", error);
+  } catch {
     toast.add({
       severity: "error",
       summary: "Error",
       detail: "Something went wrong with user update",
-      life: 3000,
+      life: TOAST_LIFE,
     });
   }
 }

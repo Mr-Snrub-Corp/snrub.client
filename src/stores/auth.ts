@@ -54,17 +54,13 @@ export const useAuthStore = defineStore(
     }
 
     async function loginGoogle() {
-      try {
-        const response = await api.auth.loginGoogle();
-        const data = response as AuthResponse;
+      const response = await api.auth.getGoogleToken();
+      const data = response as AuthResponse;
 
-        setUser(data.user);
-        setToken(data.access_token);
+      setUser(data.user);
+      setToken(data.access_token);
 
-        return data;
-      } catch (error) {
-        throw error;
-      }
+      return data;
     }
 
     async function requestReset({ email }: { email: string }) {

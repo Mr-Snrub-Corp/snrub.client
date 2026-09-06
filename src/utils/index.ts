@@ -1,3 +1,4 @@
+import type { RouteLocationRaw, Router } from "vue-router";
 import { UUID_RE } from "@/constants/validation";
 
 const segmentPrefix: Record<string, string> = { reports: "RPT" };
@@ -46,6 +47,15 @@ export const formatDate = (dateString: string) => {
 export const formatTime = (dateString: string) => {
   return new Date(dateString).toLocaleTimeString("en-US");
 };
+
+/** Prefer in-session history; otherwise push a named fallback. */
+export function navigateBack(router: Router, fallback: RouteLocationRaw) {
+  if (window.history.state?.back) {
+    router.back();
+    return;
+  }
+  router.push(fallback);
+}
 
 export function timeAgo(dateString: string): string {
   const diffMs = Date.now() - new Date(dateString).getTime();
