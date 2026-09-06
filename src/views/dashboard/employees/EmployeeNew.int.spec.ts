@@ -3,14 +3,17 @@ import type { RouteRecordRaw } from "vue-router";
 import EmployeeNew from "./EmployeeNew.vue";
 import { USER_ROLES, USER_STATUS } from "@/constants/enums";
 import { makeUser } from "@/test/factories/user.factory.ts";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { flushPromises } from "@vue/test-utils";
+import { http, HttpResponse } from "msw";
 import Password from "primevue/password";
 import { useUsersStore } from "@/stores/users.ts";
+import { server } from "@/test/msw/server";
 
 const { add } = vi.hoisted(() => ({ add: vi.fn() }));
 vi.mock("primevue/usetoast", () => ({ useToast: () => ({ add }) }));
 
+const API = import.meta.env.VITE_API_URL;
 const blank = { template: "<div />" };
 
 const NEW_EMAIL = "homer@snrub.test";
@@ -44,10 +47,23 @@ function renderNew() {
       auth: { user: makeUser({ uid: "logged-in" }), token: "tok" },
     },
     stubs: { FileUpload: true },
+    stubActions: false,
   });
 }
 
+async function fillValidForm(wrapper: Awaited<ReturnType<typeof renderNew>>["wrapper"]) {
+  await wrapper.find(`[data-testid="${EMAIL}"]`).setValue(NEW_EMAIL);
+  await wrapper.find(`[data-testid="${NAME}"]`).setValue("Homer");
+  const passwordComponent = wrapper.findComponent(Password);
+  passwordComponent.vm.$emit("update:modelValue", "Password1!");
+  await flushPromises();
+}
+
 describe("EmployeeNew", () => {
+  beforeEach(() => {
+    add.mockClear();
+  });
+
   it("Submit button disabled until the form is valid", async () => {
     const { wrapper } = await renderNew();
 
@@ -70,39 +86,36 @@ describe("EmployeeNew", () => {
     expect(wrapper.find(`[data-testid="${CREATE_BTN}"]`).attributes("disabled")).toBeUndefined();
   });
 
-  it("calls createUser with current form data on submit", async () => {
-    const { wrapper, pinia } = await renderNew();
+  it("creates the employee via the API and navigates to the detail page", async () => {
+    const { wrapper, pinia, router } = await renderNew();
     await flushPromises();
 
-    const store = useUsersStore(pinia);
-    vi.mocked(store.updateUser).mockResolvedValue(SMITHERS);
-
-    await wrapper.find(`[data-testid="${EMAIL}"]`).setValue(NEW_EMAIL);
-    await wrapper.find(`[data-testid="${NAME}"]`).setValue("Homer");
-    const passwordComponent = wrapper.findComponent(Password);
-    passwordComponent.vm.$emit("update:modelValue", "Password1!");
-    await flushPromises();
+    await fillValidForm(wrapper);
     await wrapper.find(`[data-testid="${CREATE_BTN}"]`).trigger("click");
     await flushPromises();
 
-    expect(store.createUser).toHaveBeenCalledWith(
+    const created = useUsersStore(pinia).getUserById("new-user-1");
+    expect(created).toEqual(
       expect.objectContaining({
+        uid: "new-user-1",
         email: NEW_EMAIL,
         name: "Homer",
         role: USER_ROLES.VIEWER,
         status: USER_STATUS.ACTIVE,
-        password: "Password1!",
       }),
     );
+    expect(router.currentRoute.value.name).toBe("employeeDetail");
+    expect(router.currentRoute.value.params.uid).toBe("new-user-1");
   });
 
-  it("shows error toast when createUser rejects", async () => {
-    const { wrapper, pinia } = await renderNew();
+  it("shows error toast when create fails", async () => {
+    server.use(
+      http.post(`${API}/users`, () => HttpResponse.json({ detail: "boom" }, { status: 500 })),
+    );
+    const { wrapper } = await renderNew();
     await flushPromises();
 
-    const store = useUsersStore(pinia);
-    vi.mocked(store.createUser).mockRejectedValue(new Error("Network Error"));
-
+    await fillValidForm(wrapper);
     await wrapper.find(`[data-testid="${CREATE_BTN}"]`).trigger("click");
     await flushPromises();
 
@@ -111,7 +124,7 @@ describe("EmployeeNew", () => {
     );
   });
 
-  it("cancel navigates to employeeDetail", async () => {
+  it("cancel navigates to employees", async () => {
     const { wrapper, router } = await renderNew();
     await flushPromises();
     const push = vi.spyOn(router, "push");

@@ -1,13 +1,15 @@
 import { renderWithPlugins } from "@/test/renderWithPlugins";
 import ForgotPassword from "./ForgotPassword.vue";
 import type { RouteRecordRaw } from "vue-router";
-import { describe, expect, it, vi } from "vitest";
-import { useAuthStore } from "@/stores/auth.ts";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { flushPromises } from "@vue/test-utils";
+import { http, HttpResponse } from "msw";
+import { server } from "@/test/msw/server";
 
 const { add } = vi.hoisted(() => ({ add: vi.fn() }));
 vi.mock("primevue/usetoast", () => ({ useToast: () => ({ add }) }));
 
+const API = import.meta.env.VITE_API_URL;
 const blank = { template: "<div />" };
 
 const homerEmail = "chunkylover53@aol.com";
@@ -24,20 +26,30 @@ function renderForgotPassword() {
   return renderWithPlugins(ForgotPassword, {
     routes,
     initialRoute: "/auth/forgot-password",
-    // stubActions: false,  // Keep stubActions: false only if you add a request mock and want to exercise the real action.
+    stubActions: false,
   });
 }
 
 describe("ForgotPassword (integration)", () => {
-  it("Calls requestReset with the entered email", async () => {
-    const { wrapper, pinia } = await renderForgotPassword();
-    const auth = useAuthStore(pinia);
+  beforeEach(() => {
+    add.mockClear();
+  });
+
+  it("posts the entered email to request-password-reset", async () => {
+    let body: unknown;
+    server.use(
+      http.post(`${API}/auth/request-password-reset`, async ({ request }) => {
+        body = await request.json();
+        return HttpResponse.json({ message: "ok" });
+      }),
+    );
+    const { wrapper } = await renderForgotPassword();
 
     await wrapper.find(`[data-testid="${EMAIL}"]`).setValue(homerEmail);
     await wrapper.find("form").trigger("submit");
-    await flushPromises(); // // ← let $validate() + requestReset() settle
+    await flushPromises();
 
-    expect(auth.requestReset).toHaveBeenCalledWith({ email: homerEmail });
+    expect(body).toEqual({ email: homerEmail });
   });
 
   it("shows a success toast after submit", async () => {
@@ -91,10 +103,12 @@ describe("ForgotPassword (integration)", () => {
   });
 
   it("shows a error toast on request failure", async () => {
-    const { wrapper, pinia } = await renderForgotPassword();
-
-    const auth = useAuthStore(pinia);
-    vi.mocked(auth.requestReset).mockRejectedValue(new Error("Network Error"));
+    server.use(
+      http.post(`${API}/auth/request-password-reset`, () =>
+        HttpResponse.json({ detail: "boom" }, { status: 500 }),
+      ),
+    );
+    const { wrapper } = await renderForgotPassword();
 
     await wrapper.find(`[data-testid="${EMAIL}"]`).setValue(homerEmail);
     await wrapper.find("form").trigger("submit");
