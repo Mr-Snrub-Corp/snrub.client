@@ -36,8 +36,8 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - name: Unit tests + coverage
-        run: npx vitest run --coverage
+      - name: Tests + coverage
+        run: npm run test -- --coverage
       - name: Upload coverage HTML report
         if: always()
         uses: actions/upload-artifact@v4

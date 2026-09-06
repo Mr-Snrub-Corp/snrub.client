@@ -37,7 +37,7 @@
             placeholder="Email address"
             class="w-full p-4"
             :invalid="v$.email.$error"
-            :aria-invalid="v$.email.$error ? 'true' : undefined"
+            :aria-invalid="v$.email.$error"
             :aria-describedby="v$.email.$error ? 'email-error' : undefined"
             @blur="v$.email.$touch()"
           />
