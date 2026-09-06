@@ -141,6 +141,12 @@ const router = createRouter({
           meta: { title: "Reactor Monitoring | Snrub Corp" },
         },
         {
+          path: "god-mode",
+          name: "godMode",
+          component: () => import("@/views/dashboard/god-mode/GodMode.vue"),
+          meta: { requiresSuperAdmin: true, title: "God Mode | Snrub Corp" },
+        },
+        {
           path: "design",
           name: "design",
           component: () => import("@/views/dashboard/design/DesignIndex.vue"),

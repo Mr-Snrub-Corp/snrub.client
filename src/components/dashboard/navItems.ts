@@ -5,6 +5,7 @@ interface NavItem {
   icon: string;
   testId: string;
   to: RouteLocationRaw;
+  requiresSuperAdmin?: boolean;
 }
 
 export const navItems: NavItem[] = [
@@ -43,5 +44,12 @@ export const navItems: NavItem[] = [
     icon: "pi pi-bolt",
     testId: "nav.sidebar.reactor-monitoring-link",
     to: { name: "reactorMonitoring" },
+  },
+  {
+    label: "God Mode",
+    icon: "pi pi-bolt",
+    testId: "nav.sidebar.god-mode-link",
+    to: { name: "godMode" },
+    requiresSuperAdmin: true,
   },
 ];

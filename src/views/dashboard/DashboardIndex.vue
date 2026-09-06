@@ -33,12 +33,14 @@ import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useIncidentTypesStore } from "@/stores/incidentTypes";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
+import { useGodModeStore } from "@/stores/godMode";
 
 const router = useRouter();
 const usersStore = useUsersStore();
 const incidentTypesStore = useIncidentTypesStore();
 const authStore = useAuthStore();
 const incidentReportsStore = useIncidentReportsStore();
+const godModeStore = useGodModeStore();
 const isLoading = ref(false);
 const drawerVisible = ref(false);
 
@@ -47,6 +49,7 @@ async function handleLogout() {
   usersStore.$reset();
   incidentTypesStore.$reset();
   incidentReportsStore.$reset();
+  godModeStore.$reset();
   router.push({ name: "Login" });
 }
 
