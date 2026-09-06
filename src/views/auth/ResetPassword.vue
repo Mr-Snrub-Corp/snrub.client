@@ -57,8 +57,8 @@
               v-model="password"
               placeholder="Enter new password"
               class="w-full px-3 py-2 shadow-sm rounded-lg"
-              :aria-invalid="v$.password.$invalid ? 'true' : null"
-              :aria-describedby="v$.password.$invalid ? 'password-error' : null"
+              :aria-invalid="v$.password.$invalid"
+              :aria-describedby="v$.password.$invalid ? 'password-error' : undefined"
             />
             <Message
               v-if="v$.password.$invalid"
@@ -103,7 +103,7 @@
               v-model="confirmPassword"
               placeholder="Confirm password"
               class="w-full px-3 py-2 shadow-sm rounded-lg"
-              :aria-invalid="v$.confirmPassword.$invalid ? 'true' : undefined"
+              :aria-invalid="v$.confirmPassword.$invalid"
               :aria-describedby="v$.confirmPassword.$invalid ? 'confirmPassword-error' : undefined"
             />
             <Message

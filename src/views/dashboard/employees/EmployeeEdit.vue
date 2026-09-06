@@ -29,7 +29,7 @@
                   class="w-full"
                   data-testid="employees.edit-form.email-input"
                   :invalid="v$.email.$error"
-                  :aria-invalid="v$.email.$error ? 'true' : undefined"
+                  :aria-invalid="v$.email.$error"
                   :aria-describedby="v$.email.$error ? 'edit-email-error' : undefined"
                   @blur="v$.email.$touch()"
                 />
@@ -47,7 +47,7 @@
                   class="w-full"
                   data-testid="employees.edit-form.name-input"
                   :invalid="v$.name.$error"
-                  :aria-invalid="v$.name.$error ? 'true' : undefined"
+                  :aria-invalid="v$.name.$error"
                   :aria-describedby="v$.name.$error ? 'edit-name-error' : undefined"
                   @blur="v$.name.$touch()"
                 />
@@ -69,7 +69,7 @@
                   class="w-full"
                   data-testid="employees.edit-form.role-select"
                   :invalid="v$.role.$error"
-                  :aria-invalid="v$.role.$error ? 'true' : undefined"
+                  :aria-invalid="v$.role.$error"
                   :aria-describedby="v$.role.$error ? 'edit-role-error' : undefined"
                   @blur="v$.role.$touch()"
                 />
@@ -93,7 +93,7 @@
                   class="w-full"
                   data-testid="employees.edit-form.status-select"
                   :invalid="v$.status.$error"
-                  :aria-invalid="v$.status.$error ? 'true' : undefined"
+                  :aria-invalid="v$.status.$error"
                   :aria-describedby="v$.status.$error ? 'edit-status-error' : undefined"
                   @blur="v$.status.$touch()"
                 />

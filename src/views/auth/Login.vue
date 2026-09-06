@@ -21,7 +21,7 @@
               class="w-full p-4"
               data-testid="auth.login-form.email-input"
               :invalid="v$.email.$error"
-              :aria-invalid="v$.email.$error ? 'true' : undefined"
+              :aria-invalid="v$.email.$error"
               :aria-describedby="v$.email.$error ? 'email2-error' : undefined"
               @blur="v$.email.$touch()"
             />
@@ -43,7 +43,7 @@
               autocomplete="off"
               data-testid="auth.login-form.password-input"
               :invalid="v$.password.$error"
-              :aria-invalid="v$.password.$error ? 'true' : undefined"
+              :aria-invalid="v$.password.$error"
               :aria-describedby="v$.password.$error ? 'password2-error' : undefined"
               @blur="v$.password.$touch()"
             />

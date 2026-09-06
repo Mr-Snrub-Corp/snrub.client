@@ -28,7 +28,7 @@
               class="w-full"
               data-testid="incidents.create-form.incident-type-select"
               :invalid="v$.incident_type_id.$error"
-              :aria-invalid="v$.incident_type_id.$error ? 'true' : undefined"
+              :aria-invalid="v$.incident_type_id.$error"
               :aria-describedby="v$.incident_type_id.$error ? 'incidentType-error' : undefined"
               @blur="v$.incident_type_id.$touch()"
             />
@@ -48,7 +48,7 @@
               showTime
               class="w-full"
               :invalid="v$.occurred_at.$error"
-              :aria-invalid="v$.occurred_at.$error ? 'true' : undefined"
+              :aria-invalid="v$.occurred_at.$error"
               :aria-describedby="v$.occurred_at.$error ? 'occurredAt-error' : undefined"
               @blur="v$.occurred_at.$touch()"
             />
@@ -69,7 +69,7 @@
               auto-resize
               class="w-full"
               :invalid="v$.description.$error"
-              :aria-invalid="v$.description.$error ? 'true' : undefined"
+              :aria-invalid="v$.description.$error"
               :aria-describedby="v$.description.$error ? 'description-error' : undefined"
               @blur="v$.description.$touch()"
             />
@@ -89,7 +89,7 @@
               show-buttons
               class="w-full"
               :invalid="v$.severity.$error"
-              :aria-invalid="v$.severity.$error ? 'true' : undefined"
+              :aria-invalid="v$.severity.$error"
               :aria-describedby="v$.severity.$error ? 'severity-error' : undefined"
               @blur="v$.severity.$touch()"
             />

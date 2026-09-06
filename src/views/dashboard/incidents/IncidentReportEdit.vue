@@ -30,7 +30,7 @@
                 auto-resize
                 class="w-full"
                 :invalid="v$.description.$error"
-                :aria-invalid="v$.description.$error ? 'true' : undefined"
+                :aria-invalid="v$.description.$error"
                 :aria-describedby="v$.description.$error ? 'edit-description-error' : undefined"
                 @blur="v$.description.$touch()"
               />
@@ -50,7 +50,7 @@
                 show-buttons
                 class="w-full"
                 :invalid="v$.severity.$error"
-                :aria-invalid="v$.severity.$error ? 'true' : undefined"
+                :aria-invalid="v$.severity.$error"
                 :aria-describedby="v$.severity.$error ? 'edit-severity-error' : undefined"
                 @blur="v$.severity.$touch()"
               />
@@ -70,7 +70,7 @@
                 option-value="value"
                 class="w-full"
                 :invalid="v$.status.$error"
-                :aria-invalid="v$.status.$error ? 'true' : undefined"
+                :aria-invalid="v$.status.$error"
                 :aria-describedby="v$.status.$error ? 'edit-status-error' : undefined"
                 @blur="v$.status.$touch()"
               />
@@ -92,7 +92,7 @@
                 option-value="value"
                 class="w-full"
                 :invalid="v$.escalation_level.$error"
-                :aria-invalid="v$.escalation_level.$error ? 'true' : undefined"
+                :aria-invalid="v$.escalation_level.$error"
                 :aria-describedby="v$.escalation_level.$error ? 'edit-escalation-error' : undefined"
                 @blur="v$.escalation_level.$touch()"
               />
