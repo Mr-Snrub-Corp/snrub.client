@@ -19,7 +19,8 @@ export const handlers = [
   http.get(`${API}/users`, () => HttpResponse.json([makeUser({ uid: "u1" })])),
   http.post(`${API}/users`, async ({ request }) => {
     const body = (await request.json()) as Partial<User> & { password?: string };
-    const { password: _password, ...rest } = body;
+    const rest = { ...body };
+    delete rest.password;
     return HttpResponse.json(makeUser({ uid: "new-user-1", ...rest }));
   }),
   http.get(`${API}/users/:uid`, () => HttpResponse.json(makeUser({ uid: "u1" }))),
