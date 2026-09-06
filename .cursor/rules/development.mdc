@@ -42,6 +42,13 @@ If you write code, something must call it. If nothing calls it, don't write it.
 - Include code examples where applicable.
 - Keep documentation up-to-date with code changes.
 
-## Build & Validation
+## After Every Edit
 
-After every code change, validate the build succeeds: run `npm run build` (or the project build script) before considering the task complete.
+A session promise to "do this next time" is not enough. Before considering the task complete, run these on **touched files** (or the project scripts if many files changed):
+
+1. Format: `npx prettier --write <files>` (or `npm run format`)
+2. Lint: `npx eslint <files> --fix` (or `npm run lint`) — must be clean. Do not leave `vitest/expect-expect`, unused vars, or other CI lint failures for the developer to find.
+3. Tests covering the change: `npm run test:unit` / `npm run test:integration` as relevant
+4. Build: `npm run build` (type-check + Vite build)
+
+Chat memory does not persist. This checklist does.

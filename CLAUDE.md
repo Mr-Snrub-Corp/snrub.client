@@ -70,7 +70,8 @@ Adjacent `shared/` folder (sibling to this repo) contains an `openapi.json` expo
 - Use npm for package management
 - Prettier for formatting
 - Never use type `any`
-- Validate the build after every change: `npm run build` (runs type-check + build)
+- After every edit, before finishing: format + lint touched files, run relevant tests, then `npm run build`
+- Do not hide Vitest `expect()` in helpers (`vitest/expect-expect` fails in CI)
 
 ## data-testid Convention
 

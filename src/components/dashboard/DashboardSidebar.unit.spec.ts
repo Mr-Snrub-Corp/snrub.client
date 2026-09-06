@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import type { RouteRecordRaw } from "vue-router";
-import type { VueWrapper } from "@vue/test-utils";
 import DashboardSidebar from "./DashboardSidebar.vue";
 import { navItems } from "./navItems";
 import { renderWithPlugins } from "@/test/renderWithPlugins";
@@ -34,18 +33,14 @@ function mountSidebar(initialRoute = "/dashboard", options: { superAdmin?: boole
   });
 }
 
-function expectLinks(wrapper: VueWrapper, items: typeof navItems) {
-  for (const item of items) {
-    const link = wrapper.find(`[data-testid="${item.testId}"]`);
-    expect(link.exists()).toBe(true);
-    expect(link.text()).toContain(item.label);
-  }
-}
-
 describe("DashboardSidebar", () => {
   it("renders a link for every public nav item", async () => {
     const { wrapper } = await mountSidebar();
-    expectLinks(wrapper, publicNavItems);
+    for (const item of publicNavItems) {
+      const link = wrapper.find(`[data-testid="${item.testId}"]`);
+      expect(link.exists()).toBe(true);
+      expect(link.text()).toContain(item.label);
+    }
     for (const item of superAdminNavItems) {
       expect(wrapper.find(`[data-testid="${item.testId}"]`).exists()).toBe(false);
     }
@@ -53,7 +48,11 @@ describe("DashboardSidebar", () => {
 
   it("renders super-admin nav items only for a super_admin", async () => {
     const { wrapper } = await mountSidebar("/dashboard", { superAdmin: true });
-    expectLinks(wrapper, navItems);
+    for (const item of navItems) {
+      const link = wrapper.find(`[data-testid="${item.testId}"]`);
+      expect(link.exists()).toBe(true);
+      expect(link.text()).toContain(item.label);
+    }
   });
 
   it("marks only the Employees link current when on the employees route", async () => {
