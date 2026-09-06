@@ -202,8 +202,9 @@ import { computed, onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { FilterMatchMode } from "@primevue/core/api";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
-import { useIncidentTypesStore } from "@/stores/incidentTypes";
 import { useUsersStore } from "@/stores/users";
+import { useIncidentTypeLookup } from "@/composables/useIncidentTypeLookup";
+import { useUserLookup } from "@/composables/useUserLookup";
 import { formatDate, formatLabel } from "@/utils";
 import { getTagSeverity, getEscalationSeverity } from "@/utils/incident";
 import { INCIDENT_STATUS, ESCALATION_LEVEL } from "@/constants/enums";
@@ -221,8 +222,9 @@ import SeverityBadge from "@/components/SeverityBadge.vue";
 
 const router = useRouter();
 const incidentReportsStore = useIncidentReportsStore();
-const incidentTypesStore = useIncidentTypesStore();
 const usersStore = useUsersStore();
+const { getIncidentTypeName } = useIncidentTypeLookup();
+const { getUserName } = useUserLookup();
 
 const isLoading = ref(true);
 const skeletonRows = new Array(10).fill({});
@@ -241,16 +243,6 @@ const severityOptions = [1, 2, 3, 4, 5, 6, 7];
 const statusOptions = Object.values(INCIDENT_STATUS);
 const escalationOptions = Object.values(ESCALATION_LEVEL);
 const userOptions = computed(() => usersStore.getAllUsers.map((u) => u.name));
-
-function getIncidentTypeName(incidentTypeId: string): string {
-  const type = incidentTypesStore.getIncidentTypeById(incidentTypeId);
-  return type?.name ?? "";
-}
-
-function getUserName(userId: string): string {
-  const user = usersStore.getUserById(userId);
-  return user?.name ?? "";
-}
 
 const tableData = computed(() =>
   incidentReportsStore.getAllIncidentReports.map((report) => ({

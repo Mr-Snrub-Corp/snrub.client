@@ -144,7 +144,8 @@ import { useToast } from "primevue/usetoast";
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, sameAs, helpers } from "@vuelidate/validators";
+import { required, sameAs, helpers } from "@vuelidate/validators";
+import { passwordRules } from "@/constants/validation";
 
 const password = ref("");
 const confirmPassword = ref("");
@@ -159,28 +160,9 @@ const token = computed(() => route.query.token as string);
 
 const authStore = useAuthStore();
 
-// Custom validator for password complexity
-const containsUppercase = helpers.regex(/[A-Z]/);
-const containsLowercase = helpers.regex(/[a-z]/);
-const containsNumber = helpers.regex(/[0-9]/);
-const containsSymbol = helpers.regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/);
-
-const passwordComplexity = helpers.withMessage(
-  "Password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol",
-  (value: string) =>
-    containsUppercase(value) &&
-    containsLowercase(value) &&
-    containsNumber(value) &&
-    containsSymbol(value),
-);
-
 // Rules for validation
 const rules = {
-  password: {
-    required: helpers.withMessage("Password is required", required),
-    minLength: helpers.withMessage("Password must be at least 8 characters", minLength(8)),
-    complexity: passwordComplexity,
-  },
+  password: passwordRules,
   confirmPassword: {
     required: helpers.withMessage("Please confirm your password", required),
     sameAsPassword: helpers.withMessage("Passwords must match", sameAs(password)),

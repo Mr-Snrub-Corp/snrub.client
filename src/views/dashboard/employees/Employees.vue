@@ -22,7 +22,7 @@
         <template #body="slotProps">
           <Avatar
             v-if="slotProps.data.photo"
-            :image="`data:image/png;base64,${slotProps.data.photo}`"
+            :image="photoToDataUrl(slotProps.data.photo)"
             :aria-label="`${slotProps.data.name} profile picture`"
             class="mr-2 border border-surface-300"
             shape="circle"
@@ -93,6 +93,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import DeleteConfirmDialog from "@/components/dialogs/DeleteConfirmDialog.vue";
+import { photoToDataUrl } from "@/utils/user";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";

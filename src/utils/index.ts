@@ -16,6 +16,20 @@ export function formatLabel(str: string) {
   return words.map((word, i) => (i === 0 ? capitalizeFirstLetter(word) : word)).join(" ");
 }
 
+/**
+ * Maps an enum-like constant object to PrimeVue Select `{ label, value }` options,
+ * using `formatLabel` for display. Replaces the repeated
+ * `Object.values(X).map((v) => ({ label: formatLabel(v), value: v }))` pattern.
+ */
+export function enumToSelectOptions<T extends string>(
+  enumObj: Record<string, T>,
+): { label: string; value: T }[] {
+  return Object.values(enumObj).map((value) => ({
+    label: formatLabel(value),
+    value,
+  }));
+}
+
 export function capitalizeFirstLetter(str: string) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);

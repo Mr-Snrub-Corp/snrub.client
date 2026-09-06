@@ -80,11 +80,10 @@
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, maxLength, helpers } from "@vuelidate/validators";
 import { useAuthStore } from "@/stores/auth";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
-import { MAX_LENGTH } from "@/constants/validation";
+import { emailRules } from "@/constants/validation";
 
 const authStore = useAuthStore();
 const toast = useToast();
@@ -92,14 +91,7 @@ const toast = useToast();
 const formData = ref({ email: "" });
 
 const rules = {
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Please enter a valid email address", email),
-    maxLength: helpers.withMessage(
-      `Email must not exceed ${MAX_LENGTH.EMAIL} characters`,
-      maxLength(MAX_LENGTH.EMAIL),
-    ),
-  },
+  email: emailRules,
 };
 
 const v$ = useVuelidate(rules, formData);

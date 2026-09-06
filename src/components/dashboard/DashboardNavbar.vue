@@ -32,7 +32,7 @@
     </div>
     <div class="flex items-center gap-8">
       <Avatar
-        :image="userPhoto ? `data:image/png;base64,${userPhoto}` : undefined"
+        :image="userPhoto ? photoToDataUrl(userPhoto) : undefined"
         :icon="userPhoto ? undefined : 'pi pi-user'"
         shape="circle"
         class="border border-surface-300"
@@ -49,6 +49,7 @@ import Breadcrumb from "primevue/breadcrumb";
 import { useAuthStore } from "@/stores/auth";
 import { useUsersStore } from "@/stores/users";
 import { formatBreadcrumbSegment } from "@/utils";
+import { photoToDataUrl } from "@/utils/user";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 

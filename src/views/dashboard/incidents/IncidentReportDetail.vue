@@ -85,7 +85,7 @@
             class="flex items-center justify-between rounded-xl border border-zinc-200 dark:border-zinc-700 p-4"
           >
             <div class="text-surface-900 dark:text-surface-0">
-              {{ getSubjectName(subject.user_id) }}
+              {{ getUserName(subject.user_id) }}
             </div>
             <Tag :value="formatLabel(subject.role)" severity="info" />
           </div>
@@ -109,8 +109,8 @@ import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
-import { useIncidentTypesStore } from "@/stores/incidentTypes";
-import { useUsersStore } from "@/stores/users";
+import { useIncidentTypeLookup } from "@/composables/useIncidentTypeLookup";
+import { useUserLookup } from "@/composables/useUserLookup";
 import { formatDate, formatTime, formatLabel } from "@/utils";
 import { getTagSeverity, getEscalationSeverity } from "@/utils/incident";
 import Button from "primevue/button";
@@ -123,29 +123,20 @@ const uid = route.params.uid as string;
 
 const authStore = useAuthStore();
 const incidentReportsStore = useIncidentReportsStore();
-const incidentTypesStore = useIncidentTypesStore();
-const usersStore = useUsersStore();
+const { getIncidentTypeName } = useIncidentTypeLookup();
+const { getUserName } = useUserLookup();
 
 const isLoading = ref(false);
 
 const report = computed(() => incidentReportsStore.getIncidentReportById(uid));
 
-const incidentTypeName = computed(() => {
-  if (!report.value) return "";
-  const type = incidentTypesStore.getIncidentTypeById(report.value.incident_type_id);
-  return type?.name ?? "";
-});
+const incidentTypeName = computed(() =>
+  report.value ? getIncidentTypeName(report.value.incident_type_id) : "",
+);
 
-const reportedByName = computed(() => {
-  if (!report.value) return "";
-  const user = usersStore.getUserById(report.value.reported_by_user_id);
-  return user?.name ?? "";
-});
-
-function getSubjectName(userId: string) {
-  const user = usersStore.getUserById(userId);
-  return user?.name ?? userId;
-}
+const reportedByName = computed(() =>
+  report.value ? getUserName(report.value.reported_by_user_id) : "",
+);
 
 function handleGoBack() {
   // Check if a previous history entry exists within the current session

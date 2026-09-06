@@ -61,7 +61,7 @@
               <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Status</div>
               <Tag
                 :value="formatLabel(user.status)"
-                :severity="getStatusSeverity(user.status)"
+                :severity="getUserStatusSeverity(user.status)"
                 data-testid="employees.detail.status"
               />
             </div>
@@ -88,7 +88,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useUsersStore } from "@/stores/users";
 import { formatLabel } from "@/utils";
-import { USER_STATUS } from "@/constants/enums";
+import { getUserStatusSeverity, getUserAvatar as buildUserAvatar } from "@/utils/user";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
 import ProgressSpinner from "primevue/progressspinner";
@@ -104,26 +104,7 @@ const isLoading = ref(false);
 
 const user = computed(() => usersStore.getUserById(uid));
 
-const getUserAvatar = computed(() => {
-  if (!user.value?.photo) {
-    return "/img/avatar-placeholder.png";
-  }
-  return `data:image/png;base64,${user.value.photo}`;
-});
-
-function getStatusSeverity(status: string): string {
-  switch (status) {
-    case USER_STATUS.ACTIVE:
-      return "success";
-    case USER_STATUS.INACTIVE:
-      return "warn";
-    case USER_STATUS.SUSPENDED:
-    case USER_STATUS.DECEASED:
-      return "danger";
-    default:
-      return "info";
-  }
-}
+const getUserAvatar = computed(() => buildUserAvatar(user.value?.photo));
 
 function handleGoBack() {
   if (window.history.state.back) {

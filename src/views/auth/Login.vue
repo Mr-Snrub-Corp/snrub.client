@@ -108,11 +108,11 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Message from "primevue/message";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, maxLength, helpers } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { MAX_LENGTH } from "@/constants/validation";
+import { emailRules } from "@/constants/validation";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -121,14 +121,7 @@ const formData = ref({ email: "", password: "" });
 const errorMessage = ref("");
 
 const rules = {
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Please enter a valid email address", email),
-    maxLength: helpers.withMessage(
-      `Email must not exceed ${MAX_LENGTH.EMAIL} characters`,
-      maxLength(MAX_LENGTH.EMAIL),
-    ),
-  },
+  email: emailRules,
   password: {
     required: helpers.withMessage("Password is required", required),
   },

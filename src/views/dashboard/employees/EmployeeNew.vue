@@ -142,10 +142,10 @@ import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Select from "primevue/select";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, maxLength, minLength, helpers } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import { USER_ROLES, USER_STATUS } from "@/constants/enums";
-import { MAX_LENGTH } from "@/constants/validation";
-import { formatLabel } from "@/utils";
+import { emailRules, nameRules, passwordRules } from "@/constants/validation";
+import { enumToSelectOptions } from "@/utils";
 import { useUsersStore } from "@/stores/users";
 import { useToast } from "primevue/usetoast";
 
@@ -163,63 +163,22 @@ const formData = ref({
 });
 
 // Role options
-const roleOptions = ref(
-  Object.values(USER_ROLES).map((role) => ({
-    label: formatLabel(role),
-    value: role,
-  })),
-);
+const roleOptions = enumToSelectOptions(USER_ROLES);
 
 // User status options
-const userStatusOptions = ref(
-  Object.values(USER_STATUS).map((status) => ({
-    label: formatLabel(status),
-    value: status,
-  })),
-);
+const userStatusOptions = enumToSelectOptions(USER_STATUS);
 
 // Validation rules
 const rules = {
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Please enter a valid email address", email),
-    maxLength: helpers.withMessage(
-      `Email must not exceed ${MAX_LENGTH.EMAIL} characters`,
-      maxLength(MAX_LENGTH.EMAIL),
-    ),
-  },
-  name: {
-    required: helpers.withMessage("Name is required", required),
-    maxLength: helpers.withMessage(
-      `Name must not exceed ${MAX_LENGTH.NAME} characters`,
-      maxLength(MAX_LENGTH.NAME),
-    ),
-  },
+  email: emailRules,
+  name: nameRules,
   role: {
     required: helpers.withMessage("Role is required", required),
   },
   status: {
     required: helpers.withMessage("Employee status is required", required),
   },
-  password: {
-    required: helpers.withMessage("Password is required", required),
-    minLength: helpers.withMessage("Password must be at least 8 characters", minLength(8)),
-    hasDigit: helpers.withMessage("Password must contain at least one digit", (value: string) =>
-      /[0-9]/.test(value),
-    ),
-    hasUppercase: helpers.withMessage(
-      "Password must contain at least one uppercase letter",
-      (value: string) => /[A-Z]/.test(value),
-    ),
-    hasLowercase: helpers.withMessage(
-      "Password must contain at least one lowercase letter",
-      (value: string) => /[a-z]/.test(value),
-    ),
-    hasSpecialChar: helpers.withMessage(
-      "Password must contain at least one special character",
-      (value: string) => /[!@#$%^&*()\-_=+[\]{}|;:,.<>?/`~]/.test(value),
-    ),
-  },
+  password: passwordRules,
 };
 
 const v$ = useVuelidate(rules, formData);

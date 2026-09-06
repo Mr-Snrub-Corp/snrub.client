@@ -92,7 +92,7 @@
             <div class="flex flex-col gap-1">
               <div class="flex items-center gap-2">
                 <span class="text-surface-900 dark:text-surface-0 font-medium leading-tight">
-                  {{ getReportedByName(report.reported_by_user_id) }}
+                  {{ getUserName(report.reported_by_user_id) }}
                 </span>
                 <span class="text-surface-500 dark:text-surface-400 leading-tight">·</span>
                 <span class="text-surface-500 dark:text-surface-400 text-sm leading-tight">
@@ -127,8 +127,8 @@
 <script setup lang="ts">
 import { INCIDENT_STATUS, ESCALATION_LEVEL } from "@/constants/enums";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
-import { useIncidentTypesStore } from "@/stores/incidentTypes";
-import { useUsersStore } from "@/stores/users";
+import { useIncidentTypeLookup } from "@/composables/useIncidentTypeLookup";
+import { useUserLookup } from "@/composables/useUserLookup";
 import type { IncidentReport } from "@/types/incidentReport";
 import { formatLabel, timeAgo } from "@/utils";
 import { GRADIENTS } from "@/utils/gradients";
@@ -142,8 +142,8 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const incidentReportsStore = useIncidentReportsStore();
-const incidentTypesStore = useIncidentTypesStore();
-const usersStore = useUsersStore();
+const { getIncidentTypeName } = useIncidentTypeLookup();
+const { getUserName } = useUserLookup();
 
 const recentReports = ref<IncidentReport[]>([]);
 const isLoading = ref(true);
@@ -235,14 +235,6 @@ const criticalActivityLog = computed(() => {
 
   return result;
 });
-
-function getReportedByName(userId: string): string {
-  return usersStore.getUserById(userId)?.name ?? userId;
-}
-
-function getIncidentTypeName(typeId: string): string {
-  return incidentTypesStore.getIncidentTypeById(typeId)?.name ?? "";
-}
 
 onBeforeMount(async () => {
   const endDate = new Date();

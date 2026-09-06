@@ -223,7 +223,7 @@ import { required, helpers } from "@vuelidate/validators";
 import { INCIDENT_STATUS, ESCALATION_LEVEL } from "@/constants/enums";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
 import { useIncidentReportSubjects } from "@/composables/useIncidentReportSubjects";
-import { formatLabel } from "@/utils";
+import { formatLabel, enumToSelectOptions } from "@/utils";
 import type {
   IncidentStatus,
   EscalationLevel,
@@ -266,15 +266,9 @@ const {
 } = useIncidentReportSubjects(formData);
 
 // Options
-const statusOptions = Object.values(INCIDENT_STATUS).map((s) => ({
-  label: formatLabel(s),
-  value: s,
-}));
+const statusOptions = enumToSelectOptions(INCIDENT_STATUS);
 
-const escalationLevelOptions = Object.values(ESCALATION_LEVEL).map((e) => ({
-  label: formatLabel(e),
-  value: e,
-}));
+const escalationLevelOptions = enumToSelectOptions(ESCALATION_LEVEL);
 
 // Validation
 const rules = {

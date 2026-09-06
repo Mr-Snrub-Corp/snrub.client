@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { formatLabel, capitalizeFirstLetter, timeAgo } from "./index";
+import { formatLabel, capitalizeFirstLetter, timeAgo, enumToSelectOptions } from "./index";
 
 describe("capitalizeFirstLetter", () => {
   it("capitalizes the first letter of a lowercase word", () => {
@@ -62,6 +62,20 @@ describe("formatLabel", () => {
 
   it("handles strings with no underscores and mixed case", () => {
     expect(formatLabel("HelloWorld")).toBe("HelloWorld");
+  });
+});
+
+describe("enumToSelectOptions", () => {
+  it("maps each enum value to a formatted label and raw value", () => {
+    const options = enumToSelectOptions({ A: "first_one", B: "second" });
+    expect(options).toEqual([
+      { label: "First one", value: "first_one" },
+      { label: "Second", value: "second" },
+    ]);
+  });
+
+  it("returns an empty array for an empty enum object", () => {
+    expect(enumToSelectOptions({})).toEqual([]);
   });
 });
 

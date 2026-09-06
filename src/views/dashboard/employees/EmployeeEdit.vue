@@ -169,12 +169,13 @@ import FileUpload from "primevue/fileupload";
 import ProgressSpinner from "primevue/progressspinner";
 import type { FileUploadSelectEvent } from "primevue/fileupload";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, maxLength, helpers } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import { USER_ROLES, USER_STATUS } from "@/constants/enums";
-import { MAX_LENGTH } from "@/constants/validation";
+import { emailRules, nameRules } from "@/constants/validation";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
-import { formatLabel } from "@/utils";
+import { enumToSelectOptions } from "@/utils";
+import { getUserAvatar as buildUserAvatar } from "@/utils/user";
 import type { UserRole, UserStatus } from "@/types/user";
 import { useToast } from "primevue/usetoast";
 
@@ -202,15 +203,9 @@ const formData = ref<{
   photo: "",
 });
 
-const roleOptions = Object.values(USER_ROLES).map((role) => ({
-  label: formatLabel(role),
-  value: role,
-}));
+const roleOptions = enumToSelectOptions(USER_ROLES);
 
-const userStatusOptions = Object.values(USER_STATUS).map((status) => ({
-  label: formatLabel(status),
-  value: status,
-}));
+const userStatusOptions = enumToSelectOptions(USER_STATUS);
 
 const isUserEditMode = computed(() => {
   const user = usersStore.getUserById(uid);
@@ -221,21 +216,8 @@ const isUserEditMode = computed(() => {
 });
 
 const rules = {
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Please enter a valid email address", email),
-    maxLength: helpers.withMessage(
-      `Email must not exceed ${MAX_LENGTH.EMAIL} characters`,
-      maxLength(MAX_LENGTH.EMAIL),
-    ),
-  },
-  name: {
-    required: helpers.withMessage("Name is required", required),
-    maxLength: helpers.withMessage(
-      `Name must not exceed ${MAX_LENGTH.NAME} characters`,
-      maxLength(MAX_LENGTH.NAME),
-    ),
-  },
+  email: emailRules,
+  name: nameRules,
   role: {
     required: helpers.withMessage("Role is required", required),
   },
@@ -325,12 +307,7 @@ function handleCancel() {
   router.push({ name: "employeeDetail", params: { uid } });
 }
 
-const getUserAvatar = computed(() => {
-  if (!formData.value.photo) {
-    return "/img/avatar-placeholder.png";
-  }
-  return `data:image/png;base64,${formData.value.photo}`;
-});
+const getUserAvatar = computed(() => buildUserAvatar(formData.value.photo));
 
 onMounted(async () => {
   isLoading.value = true;

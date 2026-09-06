@@ -3,13 +3,15 @@ import { maxLength, between, required, helpers } from "@vuelidate/validators";
 import { SUBJECT_ROLE } from "@/constants/enums";
 import { MAX_LENGTH } from "@/constants/validation";
 import { useUsersStore } from "@/stores/users";
+import { useUserLookup } from "@/composables/useUserLookup";
 import type { SubjectRole, IncidentReportSubjectCreate } from "@/types/incidentReport";
-import { formatLabel } from "@/utils";
+import { enumToSelectOptions } from "@/utils";
 
 export function useIncidentReportSubjects(
   formData: Ref<{ subjects: IncidentReportSubjectCreate[] }>,
 ) {
   const usersStore = useUsersStore();
+  const { getUserName } = useUserLookup();
 
   const showAddSubject = ref(false);
   const newSubject = ref<{ user_id: string; role: SubjectRole | "" }>({
@@ -17,10 +19,7 @@ export function useIncidentReportSubjects(
     role: "",
   });
 
-  const subjectRoleOptions = Object.values(SUBJECT_ROLE).map((r) => ({
-    label: formatLabel(r),
-    value: r,
-  }));
+  const subjectRoleOptions = enumToSelectOptions(SUBJECT_ROLE);
 
   const availableUsers = computed(() => {
     const existingUserIds = formData.value.subjects.map((s) => s.user_id);
@@ -28,8 +27,7 @@ export function useIncidentReportSubjects(
   });
 
   function getSubjectName(userId: string): string {
-    const user = usersStore.getUserById(userId);
-    return user?.name ?? userId;
+    return getUserName(userId);
   }
 
   function addSubject() {
