@@ -1,6 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { Router } from "vue-router";
-import { formatLabel, capitalizeFirstLetter, timeAgo, enumToSelectOptions, navigateBack } from "./index";
+import {
+  formatLabel,
+  capitalizeFirstLetter,
+  timeAgo,
+  enumToSelectOptions,
+  navigateBack,
+} from "./index";
 
 describe("capitalizeFirstLetter", () => {
   it("capitalizes the first letter of a lowercase word", () => {
