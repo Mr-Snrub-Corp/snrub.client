@@ -4,9 +4,10 @@ A phased roadmap to stand up and enforce an enterprise-grade testing setup for `
 
 ## Where we are
 
-- 7 unit-test files (~67 tests + 12 TODO) covering 3 stores, 1 composable, `utils/index`, and 2 components.
-- Highest-risk logic is **untested**: the HTTP client (`httpService.ts`), the WebSocket telemetry state machine (`useReactorTelemetry.ts`), the router auth/RBAC guard, and every form view.
-- No coverage measurement, no shared test scaffolding, duplicated inline fixtures, an inconsistent naming convention, two contradictory prettier configs.
+- 23 test files (15 `*.unit.spec.ts`, 8 `*.int.spec.ts`), 236 tests, all passing — covering stores, composables, `utils/*`, `httpService`, the router guard, `types/errors`, components, and auth/employee/incident form-view integration.
+- Previously highest-risk logic is now covered: the HTTP client (`httpService.ts`), the WebSocket telemetry state machine (`useReactorTelemetry.ts`), the router auth/RBAC guard, and the form views all have tests.
+- Remaining gaps: list/detail/shell views and `ReactorMonitoring` (component + integration), plus the `incidentCategories` store and `utils/gradients`.
+- Shared scaffolding (`src/test/`), factories, and MSW handlers are in place; naming convention normalized; prettier config unified.
 - CI runs type-check + tests + build on PRs but gives no coverage signal. E2E (separate `snrub.e2e` repo) results never report back to the client PR.
 
 ## Decisions
@@ -47,8 +48,9 @@ src/test/
 │                                  # global afterEach Pinia reset + vi.clearAllMocks(); matchMedia/ResizeObserver polyfills
 ├── renderWithPlugins.ts           # mount(component,{props,initialRoute,piniaState,stubs}) → {wrapper,router,pinia}
 ├── factories/                     # makeUser / makeIncidentReport / makeIncidentType — replace duplicated inline mocks
-├── fixtures/                      # authResponse sample, etc.
 └── msw/{server.ts, handlers.ts}   # setupServer + happy-path handlers per httpService endpoint
+
+# Note: a `fixtures/` folder was scoped here but never created — factories cover current needs.
 ```
 
 - Wire `setupFiles: ['src/test/setup.ts']` into `vitest.config.ts`; extend `tsconfig.vitest.json` include to `src/test/**/*.ts`.

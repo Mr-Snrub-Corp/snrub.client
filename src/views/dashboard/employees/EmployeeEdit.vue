@@ -1,12 +1,6 @@
 <template>
-  <div
-    class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 h-screen overflow-y-auto"
-  >
-    <div v-if="isLoading" class="flex justify-center py-20">
-      <ProgressSpinner />
-    </div>
-
-    <template v-else>
+  <PageShell content-class="h-screen overflow-y-auto">
+    <LoadingState :loading="isLoading">
       <div class="mb-6">
         <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">
           Edit Employee Details
@@ -19,8 +13,12 @@
 
           <div class="flex gap-10 flex-col-reverse md:flex-row">
             <div class="flex-auto flex flex-col gap-6">
-              <div class="flex flex-col gap-2">
-                <label for="email" class="text-surface-900 dark:text-surface-0">Email *</label>
+              <FormField
+                label="Email *"
+                input-id="email"
+                error-id="edit-email-error"
+                :field="v$.email"
+              >
                 <InputText
                   id="email"
                   v-model="formData.email"
@@ -33,13 +31,9 @@
                   :aria-describedby="v$.email.$error ? 'edit-email-error' : undefined"
                   @blur="v$.email.$touch()"
                 />
-                <small v-if="v$.email.$error" id="edit-email-error" class="text-red-500">
-                  {{ v$.email.$errors[0]?.$message }}
-                </small>
-              </div>
+              </FormField>
 
-              <div class="flex flex-col gap-2">
-                <label for="name" class="text-surface-900 dark:text-surface-0">Name *</label>
+              <FormField label="Name *" input-id="name" error-id="edit-name-error" :field="v$.name">
                 <InputText
                   id="name"
                   v-model="formData.name"
@@ -51,13 +45,9 @@
                   :aria-describedby="v$.name.$error ? 'edit-name-error' : undefined"
                   @blur="v$.name.$touch()"
                 />
-                <small v-if="v$.name.$error" id="edit-name-error" class="text-red-500">
-                  {{ v$.name.$errors[0]?.$message }}
-                </small>
-              </div>
+              </FormField>
 
-              <div class="flex flex-col gap-2">
-                <label for="role" class="text-surface-900 dark:text-surface-0">Role *</label>
+              <FormField label="Role *" input-id="role" error-id="edit-role-error" :field="v$.role">
                 <Select
                   id="role"
                   v-model="formData.role"
@@ -73,15 +63,14 @@
                   :aria-describedby="v$.role.$error ? 'edit-role-error' : undefined"
                   @blur="v$.role.$touch()"
                 />
-                <small v-if="v$.role.$error" id="edit-role-error" class="text-red-500">
-                  {{ v$.role.$errors[0]?.$message }}
-                </small>
-              </div>
+              </FormField>
 
-              <div class="flex flex-col gap-2">
-                <label for="userStatus" class="text-surface-900 dark:text-surface-0"
-                  >Employee Status *</label
-                >
+              <FormField
+                label="Employee Status *"
+                input-id="userStatus"
+                error-id="edit-status-error"
+                :field="v$.status"
+              >
                 <Select
                   id="userStatus"
                   v-model="formData.status"
@@ -97,10 +86,7 @@
                   :aria-describedby="v$.status.$error ? 'edit-status-error' : undefined"
                   @blur="v$.status.$touch()"
                 />
-                <small v-if="v$.status.$error" id="edit-status-error" class="text-red-500">
-                  {{ v$.status.$errors[0]?.$message }}
-                </small>
-              </div>
+              </FormField>
             </div>
 
             <div class="flex flex-col gap-2">
@@ -155,8 +141,8 @@
           </div>
         </div>
       </div>
-    </template>
-  </div>
+    </LoadingState>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -166,15 +152,18 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Select from "primevue/select";
 import FileUpload from "primevue/fileupload";
-import ProgressSpinner from "primevue/progressspinner";
 import type { FileUploadSelectEvent } from "primevue/fileupload";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, maxLength, helpers } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import { USER_ROLES, USER_STATUS } from "@/constants/enums";
-import { MAX_LENGTH } from "@/constants/validation";
+import { emailRules, nameRules } from "@/constants/validation";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
-import { formatLabel } from "@/utils";
+import { enumToSelectOptions } from "@/utils";
+import FormField from "@/components/form/FormField.vue";
+import LoadingState from "@/components/layout/LoadingState.vue";
+import PageShell from "@/components/layout/PageShell.vue";
+import { getUserAvatar as buildUserAvatar } from "@/utils/user";
 import type { UserRole, UserStatus } from "@/types/user";
 import { useToast } from "primevue/usetoast";
 
@@ -202,15 +191,9 @@ const formData = ref<{
   photo: "",
 });
 
-const roleOptions = Object.values(USER_ROLES).map((role) => ({
-  label: formatLabel(role),
-  value: role,
-}));
+const roleOptions = enumToSelectOptions(USER_ROLES);
 
-const userStatusOptions = Object.values(USER_STATUS).map((status) => ({
-  label: formatLabel(status),
-  value: status,
-}));
+const userStatusOptions = enumToSelectOptions(USER_STATUS);
 
 const isUserEditMode = computed(() => {
   const user = usersStore.getUserById(uid);
@@ -221,21 +204,8 @@ const isUserEditMode = computed(() => {
 });
 
 const rules = {
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Please enter a valid email address", email),
-    maxLength: helpers.withMessage(
-      `Email must not exceed ${MAX_LENGTH.EMAIL} characters`,
-      maxLength(MAX_LENGTH.EMAIL),
-    ),
-  },
-  name: {
-    required: helpers.withMessage("Name is required", required),
-    maxLength: helpers.withMessage(
-      `Name must not exceed ${MAX_LENGTH.NAME} characters`,
-      maxLength(MAX_LENGTH.NAME),
-    ),
-  },
+  email: emailRules,
+  name: nameRules,
   role: {
     required: helpers.withMessage("Role is required", required),
   },
@@ -325,12 +295,7 @@ function handleCancel() {
   router.push({ name: "employeeDetail", params: { uid } });
 }
 
-const getUserAvatar = computed(() => {
-  if (!formData.value.photo) {
-    return "/img/avatar-placeholder.png";
-  }
-  return `data:image/png;base64,${formData.value.photo}`;
-});
+const getUserAvatar = computed(() => buildUserAvatar(formData.value.photo));
 
 onMounted(async () => {
   isLoading.value = true;

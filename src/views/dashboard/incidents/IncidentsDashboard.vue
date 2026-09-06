@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 min-h-full overflow-hidden"
-  >
+  <PageShell content-class="min-h-full overflow-hidden">
     <!-- Header with Add User Button -->
     <div class="mb-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Incidents</h1>
@@ -98,7 +96,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -111,6 +109,7 @@ import Button from "primevue/button";
 import Tag from "primevue/tag";
 import Skeleton from "primevue/skeleton";
 import SeverityBadge from "@/components/SeverityBadge.vue";
+import PageShell from "@/components/layout/PageShell.vue";
 import type { EnrichedReport } from "@/types/incidentReport";
 import { INCIDENT_STATUS } from "@/constants/enums";
 import { formatDate, formatLabel } from "@/utils";

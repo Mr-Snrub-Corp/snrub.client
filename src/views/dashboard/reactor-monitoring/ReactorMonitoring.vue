@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 flex-1">
+  <PageShell content-class="flex-1">
     <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0 mb-6">Reactor Monitoring</h1>
 
     <Message
@@ -334,7 +334,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -344,6 +344,7 @@ import Chart from "primevue/chart";
 import Message from "primevue/message";
 import ProgressSpinner from "primevue/progressspinner";
 import Tag from "primevue/tag";
+import PageShell from "@/components/layout/PageShell.vue";
 import { formatLabel } from "@/utils";
 import { getReactorStatusSeverity } from "@/utils/reactor";
 import type { ReactorStatus } from "@/types/reactorTelemetry";

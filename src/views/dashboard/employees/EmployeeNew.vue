@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 h-screen"
-  >
+  <PageShell content-class="h-screen">
     <div class="mb-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Add New Employee</h1>
     </div>
@@ -13,8 +11,7 @@
         </div>
 
         <div class="flex flex-col gap-6">
-          <div class="flex flex-col gap-2">
-            <label for="email" class="text-surface-900 dark:text-surface-0">Email *</label>
+          <FormField label="Email *" input-id="email" error-id="new-email-error" :field="v$.email">
             <InputText
               id="email"
               v-model="formData.email"
@@ -26,13 +23,9 @@
               :aria-describedby="v$.email.$error ? 'new-email-error' : undefined"
               @blur="v$.email.$touch()"
             />
-            <small v-if="v$.email.$error" id="new-email-error" class="text-red-500">
-              {{ v$.email.$errors[0]?.$message }}
-            </small>
-          </div>
+          </FormField>
 
-          <div class="flex flex-col gap-2">
-            <label for="name" class="text-surface-900 dark:text-surface-0">Name *</label>
+          <FormField label="Name *" input-id="name" error-id="new-name-error" :field="v$.name">
             <InputText
               id="name"
               v-model="formData.name"
@@ -44,13 +37,9 @@
               :aria-describedby="v$.name.$error ? 'new-name-error' : undefined"
               @blur="v$.name.$touch()"
             />
-            <small v-if="v$.name.$error" id="new-name-error" class="text-red-500">
-              {{ v$.name.$errors[0]?.$message }}
-            </small>
-          </div>
+          </FormField>
 
-          <div class="flex flex-col gap-2">
-            <label for="role" class="text-surface-900 dark:text-surface-0">Role *</label>
+          <FormField label="Role *" input-id="role" error-id="new-role-error" :field="v$.role">
             <Select
               id="role"
               v-model="formData.role"
@@ -65,15 +54,14 @@
               :aria-describedby="v$.role.$error ? 'new-role-error' : undefined"
               @blur="v$.role.$touch()"
             />
-            <small v-if="v$.role.$error" id="new-role-error" class="text-red-500">
-              {{ v$.role.$errors[0]?.$message }}
-            </small>
-          </div>
+          </FormField>
 
-          <div class="flex flex-col gap-2">
-            <label for="userStatus" class="text-surface-900 dark:text-surface-0"
-              >Employee Status *</label
-            >
+          <FormField
+            label="Employee Status *"
+            input-id="userStatus"
+            error-id="new-status-error"
+            :field="v$.status"
+          >
             <Select
               id="userStatus"
               v-model="formData.status"
@@ -88,13 +76,14 @@
               :aria-describedby="v$.status.$error ? 'new-status-error' : undefined"
               @blur="v$.status.$touch()"
             />
-            <small v-if="v$.status.$error" id="new-status-error" class="text-red-500">
-              {{ v$.status.$errors[0]?.$message }}
-            </small>
-          </div>
+          </FormField>
 
-          <div class="flex flex-col gap-2">
-            <label for="password" class="text-surface-900 dark:text-surface-0">Password *</label>
+          <FormField
+            label="Password *"
+            input-id="password"
+            error-id="new-password-error"
+            :field="v$.password"
+          >
             <Password
               id="password"
               v-model="formData.password"
@@ -107,10 +96,7 @@
               :aria-describedby="v$.password.$error ? 'new-password-error' : undefined"
               @blur="v$.password.$touch()"
             />
-            <small v-if="v$.password.$error" id="new-password-error" class="text-red-500">
-              {{ v$.password.$errors[0]?.$message }}
-            </small>
-          </div>
+          </FormField>
         </div>
 
         <div class="flex gap-3">
@@ -131,7 +117,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -142,10 +128,12 @@ import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Select from "primevue/select";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, maxLength, minLength, helpers } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import { USER_ROLES, USER_STATUS } from "@/constants/enums";
-import { MAX_LENGTH } from "@/constants/validation";
-import { formatLabel } from "@/utils";
+import { emailRules, nameRules, passwordRules } from "@/constants/validation";
+import { enumToSelectOptions } from "@/utils";
+import FormField from "@/components/form/FormField.vue";
+import PageShell from "@/components/layout/PageShell.vue";
 import { useUsersStore } from "@/stores/users";
 import { useToast } from "primevue/usetoast";
 
@@ -163,63 +151,22 @@ const formData = ref({
 });
 
 // Role options
-const roleOptions = ref(
-  Object.values(USER_ROLES).map((role) => ({
-    label: formatLabel(role),
-    value: role,
-  })),
-);
+const roleOptions = enumToSelectOptions(USER_ROLES);
 
 // User status options
-const userStatusOptions = ref(
-  Object.values(USER_STATUS).map((status) => ({
-    label: formatLabel(status),
-    value: status,
-  })),
-);
+const userStatusOptions = enumToSelectOptions(USER_STATUS);
 
 // Validation rules
 const rules = {
-  email: {
-    required: helpers.withMessage("Email is required", required),
-    email: helpers.withMessage("Please enter a valid email address", email),
-    maxLength: helpers.withMessage(
-      `Email must not exceed ${MAX_LENGTH.EMAIL} characters`,
-      maxLength(MAX_LENGTH.EMAIL),
-    ),
-  },
-  name: {
-    required: helpers.withMessage("Name is required", required),
-    maxLength: helpers.withMessage(
-      `Name must not exceed ${MAX_LENGTH.NAME} characters`,
-      maxLength(MAX_LENGTH.NAME),
-    ),
-  },
+  email: emailRules,
+  name: nameRules,
   role: {
     required: helpers.withMessage("Role is required", required),
   },
   status: {
     required: helpers.withMessage("Employee status is required", required),
   },
-  password: {
-    required: helpers.withMessage("Password is required", required),
-    minLength: helpers.withMessage("Password must be at least 8 characters", minLength(8)),
-    hasDigit: helpers.withMessage("Password must contain at least one digit", (value: string) =>
-      /[0-9]/.test(value),
-    ),
-    hasUppercase: helpers.withMessage(
-      "Password must contain at least one uppercase letter",
-      (value: string) => /[A-Z]/.test(value),
-    ),
-    hasLowercase: helpers.withMessage(
-      "Password must contain at least one lowercase letter",
-      (value: string) => /[a-z]/.test(value),
-    ),
-    hasSpecialChar: helpers.withMessage(
-      "Password must contain at least one special character",
-      (value: string) => /[!@#$%^&*()\-_=+[\]{}|;:,.<>?/`~]/.test(value),
-    ),
-  },
+  password: passwordRules,
 };
 
 const v$ = useVuelidate(rules, formData);

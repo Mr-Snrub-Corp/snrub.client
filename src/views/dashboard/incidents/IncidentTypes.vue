@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950">
+  <PageShell>
     <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0 mb-8">Incident Types</h1>
 
     <!-- Skeleton loader -->
@@ -53,7 +53,7 @@
         </DataTable>
       </div>
     </div>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -62,6 +62,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Skeleton from "primevue/skeleton";
 import SeverityBadge from "@/components/SeverityBadge.vue";
+import PageShell from "@/components/layout/PageShell.vue";
 import { useIncidentCategoriesStore } from "@/stores/incidentCategories";
 import { useIncidentTypesStore } from "@/stores/incidentTypes";
 
