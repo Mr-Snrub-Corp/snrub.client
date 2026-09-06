@@ -1,79 +1,82 @@
 <template>
   <PageShell content-class="h-screen overflow-y-auto">
     <LoadingState :loading="isLoading">
-    <template v-if="user">
-      <!-- Header -->
-      <div class="mb-4 flex justify-between items-center xl:w-3/4">
-        <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Employee Details</h1>
-        <Button
-          v-if="authStore.isAdmin"
-          label="Edit"
-          icon="pi pi-pencil"
-          severity="primary"
-          data-testid="employees.detail.edit-btn"
-          @click="router.push({ name: 'employeeEdit', params: { uid } })"
-        />
-      </div>
+      <template v-if="user">
+        <!-- Header -->
+        <div class="mb-4 flex justify-between items-center xl:w-3/4">
+          <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Employee Details</h1>
+          <Button
+            v-if="authStore.isAdmin"
+            label="Edit"
+            icon="pi pi-pencil"
+            severity="primary"
+            data-testid="employees.detail.edit-btn"
+            @click="router.push({ name: 'employeeEdit', params: { uid } })"
+          />
+        </div>
 
-      <!-- Profile -->
-      <div
-        class="bg-surface-0 dark:bg-surface-900 p-6 shadow-sm rounded-2xl flex flex-col gap-6 mb-6 xl:w-3/4"
-      >
-        <div class="text-xl font-medium text-surface-900 dark:text-surface-0">Profile</div>
-        <div class="flex gap-8 flex-col md:flex-row">
-          <div class="flex-shrink-0">
-            <img
-              :src="getUserAvatar"
-              :alt="user.name ? `${user.name} profile picture` : 'Employee profile picture'"
-              class="h-32 w-32 rounded-lg object-cover border border-surface-300"
-            />
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
-            <div>
-              <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Name</div>
-              <div class="text-surface-900 dark:text-surface-0" data-testid="employees.detail.name">
-                {{ user.name }}
-              </div>
-            </div>
-            <div>
-              <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Email</div>
-              <div
-                class="text-surface-900 dark:text-surface-0"
-                data-testid="employees.detail.email"
-              >
-                {{ user.email }}
-              </div>
-            </div>
-            <div>
-              <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Role</div>
-              <Tag
-                :value="formatLabel(user.role)"
-                severity="info"
-                data-testid="employees.detail.role"
+        <!-- Profile -->
+        <div
+          class="bg-surface-0 dark:bg-surface-900 p-6 shadow-sm rounded-2xl flex flex-col gap-6 mb-6 xl:w-3/4"
+        >
+          <div class="text-xl font-medium text-surface-900 dark:text-surface-0">Profile</div>
+          <div class="flex gap-8 flex-col md:flex-row">
+            <div class="flex-shrink-0">
+              <img
+                :src="getUserAvatar"
+                :alt="user.name ? `${user.name} profile picture` : 'Employee profile picture'"
+                class="h-32 w-32 rounded-lg object-cover border border-surface-300"
               />
             </div>
-            <div>
-              <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Status</div>
-              <Tag
-                :value="formatLabel(user.status)"
-                :severity="getUserStatusSeverity(user.status)"
-                data-testid="employees.detail.status"
-              />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+              <div>
+                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Name</div>
+                <div
+                  class="text-surface-900 dark:text-surface-0"
+                  data-testid="employees.detail.name"
+                >
+                  {{ user.name }}
+                </div>
+              </div>
+              <div>
+                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Email</div>
+                <div
+                  class="text-surface-900 dark:text-surface-0"
+                  data-testid="employees.detail.email"
+                >
+                  {{ user.email }}
+                </div>
+              </div>
+              <div>
+                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Role</div>
+                <Tag
+                  :value="formatLabel(user.role)"
+                  severity="info"
+                  data-testid="employees.detail.role"
+                />
+              </div>
+              <div>
+                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Status</div>
+                <Tag
+                  :value="formatLabel(user.status)"
+                  :severity="getUserStatusSeverity(user.status)"
+                  data-testid="employees.detail.status"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Back -->
-      <Button
-        label="Back"
-        icon="pi pi-arrow-left"
-        variant="outlined"
-        severity="secondary"
-        data-testid="employees.detail.back-btn"
-        @click="handleGoBack"
-      />
-    </template>
+        <!-- Back -->
+        <Button
+          label="Back"
+          icon="pi pi-arrow-left"
+          variant="outlined"
+          severity="secondary"
+          data-testid="employees.detail.back-btn"
+          @click="handleGoBack"
+        />
+      </template>
     </LoadingState>
   </PageShell>
 </template>
