@@ -25,10 +25,14 @@
         </div>
       </div>
       <form @submit.prevent="handleReset">
-        <div class="flex flex-col gap-2 mb-4">
-          <label for="email" class="block text-surface-900 dark:text-surface-0 font-medium"
-            >Email</label
-          >
+        <FormField
+          class="mb-4"
+          label="Email"
+          input-id="email"
+          error-id="email-error"
+          :field="v$.email"
+          label-class="block text-surface-900 dark:text-surface-0 font-medium"
+        >
           <InputText
             id="email"
             data-testid="auth.forgot-password-form.email-input"
@@ -41,10 +45,7 @@
             :aria-describedby="v$.email.$error ? 'email-error' : undefined"
             @blur="v$.email.$touch()"
           />
-          <small v-if="v$.email.$error" id="email-error" class="text-red-500">
-            {{ v$.email.$errors[0]?.$message }}
-          </small>
-        </div>
+        </FormField>
 
         <div class="flex items-center justify-end mb-4">
           <Button
@@ -79,6 +80,7 @@
 <script setup lang="ts">
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import FormField from "@/components/form/FormField.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { useAuthStore } from "@/stores/auth";
 import { useToast } from "primevue/usetoast";

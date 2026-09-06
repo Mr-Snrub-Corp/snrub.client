@@ -1,12 +1,6 @@
 <template>
-  <div
-    class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 h-screen overflow-y-auto"
-  >
-    <div v-if="isLoading" class="flex justify-center py-20">
-      <ProgressSpinner />
-    </div>
-
-    <template v-else>
+  <PageShell content-class="h-screen overflow-y-auto">
+    <LoadingState :loading="isLoading">
       <div class="mb-6">
         <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">
           Edit Incident Report
@@ -18,11 +12,12 @@
           <div class="text-xl font-medium text-surface-900 dark:text-surface-0">Details</div>
 
           <div class="flex flex-col gap-6">
-            <!-- Description -->
-            <div class="flex flex-col gap-2">
-              <label for="description" class="text-surface-900 dark:text-surface-0"
-                >Description</label
-              >
+            <FormField
+              label="Description"
+              input-id="description"
+              error-id="edit-description-error"
+              :field="v$.description"
+            >
               <Textarea
                 id="description"
                 v-model="formData.description"
@@ -34,14 +29,15 @@
                 :aria-describedby="v$.description.$error ? 'edit-description-error' : undefined"
                 @blur="v$.description.$touch()"
               />
-              <small v-if="v$.description.$error" id="edit-description-error" class="text-red-500">
-                {{ v$.description.$errors[0]?.$message }}
-              </small>
-            </div>
+            </FormField>
 
-            <!-- Severity -->
-            <div class="flex flex-col gap-2 md:w-3/4">
-              <label for="severity" class="text-surface-900 dark:text-surface-0">Severity</label>
+            <FormField
+              class="md:w-3/4"
+              label="Severity"
+              input-id="severity"
+              error-id="edit-severity-error"
+              :field="v$.severity"
+            >
               <InputNumber
                 id="severity"
                 v-model="formData.severity"
@@ -54,14 +50,15 @@
                 :aria-describedby="v$.severity.$error ? 'edit-severity-error' : undefined"
                 @blur="v$.severity.$touch()"
               />
-              <small v-if="v$.severity.$error" id="edit-severity-error" class="text-red-500">
-                {{ v$.severity.$errors[0]?.$message }}
-              </small>
-            </div>
+            </FormField>
 
-            <!-- Status -->
-            <div class="flex flex-col gap-2 md:w-3/4">
-              <label for="status" class="text-surface-900 dark:text-surface-0">Status</label>
+            <FormField
+              class="md:w-3/4"
+              label="Status"
+              input-id="status"
+              error-id="edit-status-error"
+              :field="v$.status"
+            >
               <Select
                 id="status"
                 v-model="formData.status"
@@ -74,16 +71,15 @@
                 :aria-describedby="v$.status.$error ? 'edit-status-error' : undefined"
                 @blur="v$.status.$touch()"
               />
-              <small v-if="v$.status.$error" id="edit-status-error" class="text-red-500">
-                {{ v$.status.$errors[0]?.$message }}
-              </small>
-            </div>
+            </FormField>
 
-            <!-- Escalation Level -->
-            <div class="flex flex-col gap-2 md:w-3/4">
-              <label for="escalationLevel" class="text-surface-900 dark:text-surface-0"
-                >Escalation Level</label
-              >
+            <FormField
+              class="md:w-3/4"
+              label="Escalation Level"
+              input-id="escalationLevel"
+              error-id="edit-escalation-error"
+              :field="v$.escalation_level"
+            >
               <Select
                 id="escalationLevel"
                 v-model="formData.escalation_level"
@@ -96,95 +92,20 @@
                 :aria-describedby="v$.escalation_level.$error ? 'edit-escalation-error' : undefined"
                 @blur="v$.escalation_level.$touch()"
               />
-              <small
-                v-if="v$.escalation_level.$error"
-                id="edit-escalation-error"
-                class="text-red-500"
-              >
-                {{ v$.escalation_level.$errors[0]?.$message }}
-              </small>
-            </div>
+            </FormField>
           </div>
 
-          <!-- Subjects -->
-          <div class="flex flex-col gap-4">
-            <div class="flex items-center justify-between">
-              <div class="text-xl font-medium text-surface-900 dark:text-surface-0">Subjects</div>
-              <Button
-                v-if="!showAddSubject"
-                label="Add Subject"
-                icon="pi pi-plus"
-                variant="text"
-                severity="secondary"
-                @click="showAddSubject = true"
-              />
-            </div>
-
-            <div
-              v-for="(subject, index) in formData.subjects"
-              :key="subject.user_id"
-              class="flex items-center justify-between rounded-xl border border-zinc-200 dark:border-zinc-700 p-4"
-            >
-              <div class="text-surface-900 dark:text-surface-0">
-                {{ getSubjectName(subject.user_id) }}
-              </div>
-              <div class="flex items-center gap-2">
-                <Tag :value="formatLabel(subject.role)" severity="info" />
-                <Button
-                  icon="pi pi-times"
-                  :aria-label="`Remove ${getSubjectName(subject.user_id)}`"
-                  severity="danger"
-                  variant="text"
-                  rounded
-                  @click="removeSubject(index)"
-                />
-              </div>
-            </div>
-
-            <div v-if="!formData.subjects.length" class="text-sm text-zinc-500 dark:text-zinc-400">
-              No subjects added
-            </div>
-
-            <!-- Add Subject -->
-            <div v-if="showAddSubject" class="flex items-end gap-3">
-              <div class="flex flex-col gap-2 flex-1">
-                <label for="edit-subject-user" class="text-sm text-surface-900 dark:text-surface-0"
-                  >User</label
-                >
-                <Select
-                  id="edit-subject-user"
-                  v-model="newSubject.user_id"
-                  :options="availableUsers"
-                  option-label="name"
-                  option-value="uid"
-                  placeholder="Select user"
-                  filter
-                  class="w-full"
-                />
-              </div>
-              <div class="flex flex-col gap-2 flex-1">
-                <label for="edit-subject-role" class="text-sm text-surface-900 dark:text-surface-0"
-                  >Role</label
-                >
-                <Select
-                  id="edit-subject-role"
-                  v-model="newSubject.role"
-                  :options="subjectRoleOptions"
-                  option-label="label"
-                  option-value="value"
-                  placeholder="Select role"
-                  class="w-full"
-                />
-              </div>
-              <Button
-                label="Add"
-                icon="pi pi-plus"
-                severity="secondary"
-                :disabled="!newSubject.user_id || !newSubject.role"
-                @click="addSubject"
-              />
-            </div>
-          </div>
+          <IncidentReportSubjects
+            :subjects="formData.subjects"
+            v-model:show-add-subject="showAddSubject"
+            v-model:new-subject="newSubject"
+            :subject-role-options="subjectRoleOptions"
+            :available-users="availableUsers"
+            :get-subject-name="getSubjectName"
+            id-prefix="edit-subject"
+            @add="addSubject"
+            @remove="removeSubject"
+          />
 
           <!-- Actions -->
           <div class="flex gap-3">
@@ -205,8 +126,8 @@
           </div>
         </div>
       </div>
-    </template>
-  </div>
+    </LoadingState>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -216,14 +137,16 @@ import Button from "primevue/button";
 import Select from "primevue/select";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
-import Tag from "primevue/tag";
-import ProgressSpinner from "primevue/progressspinner";
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 import { INCIDENT_STATUS, ESCALATION_LEVEL } from "@/constants/enums";
 import { useIncidentReportsStore } from "@/stores/incidentReports";
 import { useIncidentReportSubjects } from "@/composables/useIncidentReportSubjects";
-import { formatLabel, enumToSelectOptions } from "@/utils";
+import IncidentReportSubjects from "@/components/incidents/IncidentReportSubjects.vue";
+import FormField from "@/components/form/FormField.vue";
+import LoadingState from "@/components/layout/LoadingState.vue";
+import PageShell from "@/components/layout/PageShell.vue";
+import { enumToSelectOptions } from "@/utils";
 import type {
   IncidentStatus,
   EscalationLevel,

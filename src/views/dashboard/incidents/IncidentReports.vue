@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950">
+  <PageShell>
     <div class="mb-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Incident Reports</h1>
       <Button
@@ -194,7 +194,7 @@
         </template>
       </Column>
     </DataTable>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -219,6 +219,7 @@ import DatePicker from "primevue/datepicker";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import SeverityBadge from "@/components/SeverityBadge.vue";
+import PageShell from "@/components/layout/PageShell.vue";
 
 const router = useRouter();
 const incidentReportsStore = useIncidentReportsStore();

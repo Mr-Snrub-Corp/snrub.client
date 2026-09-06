@@ -162,12 +162,30 @@ Keep this section up to date whenever a new `data-testid` is added or removed.
 | `incidents.types.category-group` | Category group container |
 | `incidents.types.table` | Incident types data table |
 
+### Incidents — `src/views/dashboard/incidents/IncidentReportCreate.vue`
+
+| Test ID | Element |
+|---|---|
+| `incidents.create-form.incident-type-select` | Incident type dropdown |
+| `incidents.create-form.submit-btn` | Create Report submit button |
+| `incidents.create-form.cancel-btn` | Cancel button |
+
 ### Incidents — `src/views/dashboard/incidents/IncidentReportEdit.vue`
 
 | Test ID | Element |
 |---|---|
 | `incidents.edit-form.update-btn` | Update Report submit button |
 | `incidents.edit-form.cancel-btn` | Cancel button |
+
+### Incidents — `src/components/incidents/IncidentReportSubjects.vue`
+
+| Test ID | Element |
+|---|---|
+| `incidents.subjects.add-btn` | Open add-subject form |
+| `incidents.subjects.remove-btn` | Remove subject from list |
+| `incidents.subjects.user-select` | User dropdown in add-subject form |
+| `incidents.subjects.role-select` | Role dropdown in add-subject form |
+| `incidents.subjects.confirm-add-btn` | Confirm add subject |
 
 ### Auth — `src/views/auth/ResetPassword.vue`
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950">
+  <PageShell>
     <!-- Header with Add User Button -->
     <div class="mb-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Employees</h1>
@@ -83,7 +83,7 @@
     >
       <p>Are you sure you want to delete this employee? This action cannot be undone.</p>
     </DeleteConfirmDialog>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -93,6 +93,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import DeleteConfirmDialog from "@/components/dialogs/DeleteConfirmDialog.vue";
+import PageShell from "@/components/layout/PageShell.vue";
 import { photoToDataUrl } from "@/utils/user";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";

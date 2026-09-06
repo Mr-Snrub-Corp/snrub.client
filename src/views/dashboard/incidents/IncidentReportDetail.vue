@@ -1,12 +1,7 @@
 <template>
-  <div
-    class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 h-screen overflow-y-auto"
-  >
-    <div v-if="isLoading" class="flex justify-center py-20">
-      <ProgressSpinner />
-    </div>
-
-    <template v-else-if="report">
+  <PageShell content-class="h-screen overflow-y-auto">
+    <LoadingState :loading="isLoading">
+    <template v-if="report">
       <!-- Header -->
       <div class="mb-4 flex justify-between items-center xl:w-3/4">
         <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Incident Report</h1>
@@ -101,7 +96,8 @@
         @click="handleGoBack"
       />
     </template>
-  </div>
+    </LoadingState>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -115,7 +111,8 @@ import { formatDate, formatTime, formatLabel } from "@/utils";
 import { getTagSeverity, getEscalationSeverity } from "@/utils/incident";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
-import ProgressSpinner from "primevue/progressspinner";
+import LoadingState from "@/components/layout/LoadingState.vue";
+import PageShell from "@/components/layout/PageShell.vue";
 
 const route = useRoute();
 const router = useRouter();

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="px-6 py-4 md:px-12 md:py-6 lg:px-20 lg:py-8 bg-surface-50 dark:bg-surface-950 min-h-full overflow-hidden"
-  >
+  <PageShell content-class="min-h-full overflow-hidden">
     <!-- Header with Add User Button -->
     <div class="mb-4 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0">Dashboard</h1>
@@ -121,7 +119,7 @@
         </div>
       </div>
     </template>
-  </div>
+  </PageShell>
 </template>
 
 <script setup lang="ts">
@@ -131,6 +129,7 @@ import { useIncidentTypeLookup } from "@/composables/useIncidentTypeLookup";
 import { useUserLookup } from "@/composables/useUserLookup";
 import type { IncidentReport } from "@/types/incidentReport";
 import { formatLabel, timeAgo } from "@/utils";
+import PageShell from "@/components/layout/PageShell.vue";
 import { GRADIENTS } from "@/utils/gradients";
 import { getEscalationSeverity } from "@/utils/incident";
 import Button from "primevue/button";
