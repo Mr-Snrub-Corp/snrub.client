@@ -37,6 +37,9 @@ Layout: `views/dashboard/DashboardIndex.vue`
 | `/dashboard/incidents/reports/:uid/edit` | `incidentReportEdit` | `views/dashboard/incidents/IncidentReportEdit.vue` | |
 | `/dashboard/incidents/types` | `incidentTypes` | `views/dashboard/incidents/IncidentTypes.vue` | |
 | `/dashboard/reporting` | `reporting` | `views/dashboard/reporting/Reporting.vue` | |
+| `/dashboard/reactor-monitoring` | `reactorMonitoring` | `views/dashboard/reactor-monitoring/ReactorMonitoring.vue` | |
+| `/dashboard/alarms` | `alarms` | `views/dashboard/alarms/Alarms.vue` | |
+| `/dashboard/god-mode` | `godMode` | `views/dashboard/god-mode/GodMode.vue` | `requiresSuperAdmin` |
 
 ## Design (authenticated)
 

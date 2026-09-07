@@ -46,6 +46,12 @@ export const navItems: NavItem[] = [
     to: { name: "reactorMonitoring" },
   },
   {
+    label: "Alarms",
+    icon: "pi pi-bell",
+    testId: "nav.sidebar.alarms-link",
+    to: { name: "alarms" },
+  },
+  {
     label: "God Mode",
     icon: "pi pi-bolt",
     testId: "nav.sidebar.god-mode-link",
