@@ -86,6 +86,7 @@ Keep this section up to date whenever a new `data-testid` is added or removed.
 | `nav.sidebar.design-link` | Design nav link |
 | `nav.sidebar.reporting-link` | Reporting nav link |
 | `nav.sidebar.reactor-monitoring-link` | Reactor Monitoring nav link |
+| `nav.sidebar.god-mode-link` | God Mode nav link (super_admin) |
 | `nav.sidebar.logout-btn` | Logout button |
 
 ### Navigation — `src/components/dashboard/DashboardNavbar.vue`

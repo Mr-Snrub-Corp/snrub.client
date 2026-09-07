@@ -15,7 +15,7 @@
         </div>
         <div class="flex-1 p-4 flex flex-col gap-2">
           <RouterLink
-            v-for="item in navItems"
+            v-for="item in visibleNavItems"
             :key="item.label"
             :to="item.to"
             @click="closeCallback"
@@ -47,11 +47,19 @@
 
 <script setup lang="ts">
 import Drawer from "primevue/drawer";
+import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import DashboardLogo from "./DashboardLogo.vue";
 import { navItems } from "./navItems";
+import { useAuthStore } from "@/stores/auth";
 
 const visible = defineModel<boolean>({ required: true });
+
+const authStore = useAuthStore();
+
+const visibleNavItems = computed(() =>
+  navItems.filter((item) => !item.requiresSuperAdmin || authStore.isSuperAdmin),
+);
 
 defineEmits<{
   logout: [];

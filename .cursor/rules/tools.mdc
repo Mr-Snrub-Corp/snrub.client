@@ -27,5 +27,8 @@ alwaysApply: true
 
 ## Typing and Linting
 
-- Prettier for formatting.
+- Prettier for formatting (`npm run format` / `npx prettier --write <files>`).
+- ESLint (`npm run lint` / `npx eslint <files> --fix`). CI uses `npm run lint:ci`.
+- After edits, format and lint **touched files** before finishing. See `development.mdc` After Every Edit.
+- `vitest/expect-expect` requires `expect()` in the test body. Do not hide assertions in helpers — the rule will fail in CI.
 - Do not use type `any`.

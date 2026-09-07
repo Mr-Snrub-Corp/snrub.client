@@ -127,6 +127,20 @@ api.incidentTypes = generateApi("incident-types");
 api.incidentReports = generateApi("incident-reports");
 api.incidentCategories = generateApi("incident-categories");
 
+// God-mode: super_admin-only lever control over the incident pipeline
+api.godmode = {
+  getLevers: () =>
+    fetch(`${baseUrl}/godmode/levers`, { method: "GET", headers: getHeaders() }).then((res) =>
+      handleResponse(res),
+    ),
+  setLever: <T>(lever: string, data: T) =>
+    fetch(`${baseUrl}/godmode/levers/${lever}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: getHeaders(),
+    }).then((res) => handleResponse(res)),
+};
+
 // Extend users API with photo-specific endpoints
 api.users = {
   ...api.users,

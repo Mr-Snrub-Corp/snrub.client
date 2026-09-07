@@ -13,7 +13,7 @@
     </div>
     <div class="flex-1 p-3 flex flex-col gap-1 border-r border-surface-800 overflow-y-auto">
       <RouterLink
-        v-for="item in navItems"
+        v-for="item in visibleNavItems"
         :key="item.label"
         :to="item.to"
         :data-testid="item.testId"
@@ -54,10 +54,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import type { RouteLocationRaw } from "vue-router";
 import DashboardLogo from "./DashboardLogo.vue";
 import { navItems } from "./navItems";
+import { useAuthStore } from "@/stores/auth";
 
 defineEmits<{
   logout: [];
@@ -65,6 +67,11 @@ defineEmits<{
 
 const route = useRoute();
 const router = useRouter();
+const authStore = useAuthStore();
+
+const visibleNavItems = computed(() =>
+  navItems.filter((item) => !item.requiresSuperAdmin || authStore.isSuperAdmin),
+);
 
 function isActive(to: RouteLocationRaw): boolean {
   const resolved = router.resolve(to);
