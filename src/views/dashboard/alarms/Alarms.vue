@@ -78,7 +78,11 @@
             :data-testid="tile.tsTestId"
             class="text-xs font-mono text-surface-500 dark:text-surface-400"
           >
+            <<<<<<< HEAD
             {{ alarms[tile.metric] ? formatRelativeTime(alarms[tile.metric]!.ts, now) : "" }}
+            =======
+            {{ alarms[tile.metric] ? relativeTs(alarms[tile.metric]!.ts) : "" }}
+            >>>>>>> bd00d1e (Add MQTT and alarms page)
           </span>
           <Button
             v-if="canAck(tile.metric)"
