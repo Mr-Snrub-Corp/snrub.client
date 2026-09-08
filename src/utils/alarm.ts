@@ -19,15 +19,25 @@ function isAlarmLevel(value: unknown): value is AlarmLevel {
 }
 
 export function parseAlarmPayload(raw: unknown): AlarmPayload | null {
-  if (typeof raw !== "object" || raw === null) return null;
+  if (typeof raw !== "object" || raw === null) {
+    return null;
+  }
 
   const record = raw as Record<string, unknown>;
   const { metric, level, value, ts } = record;
 
-  if (!isAlarmMetric(metric)) return null;
-  if (!isAlarmLevel(level)) return null;
-  if (typeof value !== "number" || !Number.isFinite(value)) return null;
-  if (typeof ts !== "string" || ts.length === 0) return null;
+  if (!isAlarmMetric(metric)) {
+    return null;
+  }
+  if (!isAlarmLevel(level)) {
+    return null;
+  }
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return null;
+  }
+  if (typeof ts !== "string" || ts.length === 0) {
+    return null;
+  }
 
   return { metric, level, value, ts };
 }

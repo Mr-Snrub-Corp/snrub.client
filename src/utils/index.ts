@@ -4,13 +4,17 @@ import { UUID_RE } from "@/constants/validation";
 const segmentPrefix: Record<string, string> = { reports: "RPT" };
 
 export function formatBreadcrumbSegment(seg: string, prevSeg?: string): string {
-  if (!UUID_RE.test(seg)) return capitalizeFirstLetter(seg);
+  if (!UUID_RE.test(seg)) {
+    return capitalizeFirstLetter(seg);
+  }
   const prefix = prevSeg && segmentPrefix[prevSeg];
   return prefix ? `${prefix}-${seg.slice(0, 8)}` : seg.slice(0, 8);
 }
 
 export function formatLabel(str: string) {
-  if (!str) return "";
+  if (!str) {
+    return "";
+  }
   // replace any _ with space
   const spaced = str.replace(/_/g, " ");
   const words = spaced.split(" ");
@@ -32,7 +36,9 @@ export function enumToSelectOptions<T extends string>(
 }
 
 export function capitalizeFirstLetter(str: string) {
-  if (!str) return "";
+  if (!str) {
+    return "";
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 

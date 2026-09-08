@@ -192,7 +192,9 @@ const v$ = useVuelidate(rules, formData);
 
 async function handleSubmit() {
   const isValid = await v$.value.$validate();
-  if (!isValid) return;
+  if (!isValid) {
+    return;
+  }
 
   try {
     const response = await incidentReportsStore.createIncidentReport({

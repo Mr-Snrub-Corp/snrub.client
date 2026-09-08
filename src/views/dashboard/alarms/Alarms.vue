@@ -78,11 +78,7 @@
             :data-testid="tile.tsTestId"
             class="text-xs font-mono text-surface-500 dark:text-surface-400"
           >
-            <<<<<<< HEAD
             {{ alarms[tile.metric] ? formatRelativeTime(alarms[tile.metric]!.ts, now) : "" }}
-            =======
-            {{ alarms[tile.metric] ? relativeTs(alarms[tile.metric]!.ts) : "" }}
-            >>>>>>> bd00d1e (Add MQTT and alarms page)
           </span>
           <Button
             v-if="canAck(tile.metric)"
@@ -209,7 +205,9 @@ function canAck(metric: AlarmMetric): boolean {
 
 function statusLabel(metric: AlarmMetric): string {
   const alarm = alarms[metric];
-  if (!alarm) return "";
+  if (!alarm) {
+    return "";
+  }
   const base = formatLabel(alarm.level);
   return isAcked(metric) ? `${base} · acked` : base;
 }

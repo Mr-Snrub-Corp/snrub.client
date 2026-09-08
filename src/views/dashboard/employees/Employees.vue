@@ -142,7 +142,9 @@ function handleShowDeleteDialog(userUid: string) {
 
 async function handleDelete() {
   showDeleteConfirmDialog.value = false;
-  if (!selectedUserUid.value) return;
+  if (!selectedUserUid.value) {
+    return;
+  }
 
   try {
     await usersStore.deleteUser(selectedUserUid.value);

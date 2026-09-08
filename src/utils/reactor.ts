@@ -24,12 +24,16 @@ export const getReactorStatusSeverity = (status: ReactorStatus): string => {
 };
 
 export function parseReactorTelemetry(raw: unknown): ReactorTelemetry | null {
-  if (typeof raw !== "object" || raw === null) return null;
+  if (typeof raw !== "object" || raw === null) {
+    return null;
+  }
 
   const record = raw as Record<string, unknown>;
   for (const field of TELEMETRY_FIELDS) {
     const value = record[field];
-    if (typeof value !== "number" || !Number.isFinite(value)) return null;
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      return null;
+    }
   }
 
   return {
