@@ -25,6 +25,7 @@
     "@vueuse/core": "^14.2.0",
     "chart.js": "^4.5.1",
     "jwt-decode": "^4.0.0",
+    "mqtt": "^5.15.2",
     "pinia": "^2.3.1",
     "pinia-plugin-persistedstate": "^2.4.0",
     "primeicons": "^7.0.0",

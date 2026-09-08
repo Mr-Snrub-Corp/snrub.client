@@ -86,6 +86,7 @@ Keep this section up to date whenever a new `data-testid` is added or removed.
 | `nav.sidebar.design-link` | Design nav link |
 | `nav.sidebar.reporting-link` | Reporting nav link |
 | `nav.sidebar.reactor-monitoring-link` | Reactor Monitoring nav link |
+| `nav.sidebar.alarms-link` | Alarms nav link |
 | `nav.sidebar.god-mode-link` | God Mode nav link (super_admin) |
 | `nav.sidebar.logout-btn` | Logout button |
 
@@ -220,3 +221,38 @@ Keep this section up to date whenever a new `data-testid` is added or removed.
 | `reactor-monitoring.containment-integrity.kpi-value` | Containment integrity current value |
 | `reactor-monitoring.containment-integrity.status-badge` | Containment integrity status badge |
 | `reactor-monitoring.containment-integrity.chart` | Containment integrity doughnut chart container |
+
+### Alarms — `src/views/dashboard/alarms/Alarms.vue`
+
+| Test ID | Element |
+|---|---|
+| `alarms.dashboard.loading-message` | "Awaiting alarms" loading state |
+| `alarms.dashboard.error-message` | MQTT connection error message |
+| `alarms.reactor-power.value` | Reactor power value |
+| `alarms.reactor-power.status-badge` | Reactor power status badge |
+| `alarms.reactor-power.ack-btn` | Reactor power ack button |
+| `alarms.reactor-power.timestamp` | Reactor power relative timestamp |
+| `alarms.core-temperature.value` | Core temperature value |
+| `alarms.core-temperature.status-badge` | Core temperature status badge |
+| `alarms.core-temperature.ack-btn` | Core temperature ack button |
+| `alarms.core-temperature.timestamp` | Core temperature relative timestamp |
+| `alarms.reactivity.value` | Reactivity value |
+| `alarms.reactivity.status-badge` | Reactivity status badge |
+| `alarms.reactivity.ack-btn` | Reactivity ack button |
+| `alarms.reactivity.timestamp` | Reactivity relative timestamp |
+| `alarms.coolant-flow-rate.value` | Coolant flow rate value |
+| `alarms.coolant-flow-rate.status-badge` | Coolant flow rate status badge |
+| `alarms.coolant-flow-rate.ack-btn` | Coolant flow rate ack button |
+| `alarms.coolant-flow-rate.timestamp` | Coolant flow rate relative timestamp |
+| `alarms.coolant-pressure.value` | Coolant pressure value |
+| `alarms.coolant-pressure.status-badge` | Coolant pressure status badge |
+| `alarms.coolant-pressure.ack-btn` | Coolant pressure ack button |
+| `alarms.coolant-pressure.timestamp` | Coolant pressure relative timestamp |
+| `alarms.radiation-level.value` | Radiation level value |
+| `alarms.radiation-level.status-badge` | Radiation level status badge |
+| `alarms.radiation-level.ack-btn` | Radiation level ack button |
+| `alarms.radiation-level.timestamp` | Radiation level relative timestamp |
+| `alarms.containment-integrity.value` | Containment integrity value |
+| `alarms.containment-integrity.status-badge` | Containment integrity status badge |
+| `alarms.containment-integrity.ack-btn` | Containment integrity ack button |
+| `alarms.containment-integrity.timestamp` | Containment integrity relative timestamp |

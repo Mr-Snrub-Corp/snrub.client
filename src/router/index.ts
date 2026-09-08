@@ -141,6 +141,12 @@ const router = createRouter({
           meta: { title: "Reactor Monitoring | Snrub Corp" },
         },
         {
+          path: "alarms",
+          name: "alarms",
+          component: () => import("@/views/dashboard/alarms/Alarms.vue"),
+          meta: { title: "Alarms | Snrub Corp" },
+        },
+        {
           path: "god-mode",
           name: "godMode",
           component: () => import("@/views/dashboard/god-mode/GodMode.vue"),

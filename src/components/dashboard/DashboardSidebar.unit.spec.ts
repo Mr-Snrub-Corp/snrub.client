@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/dashboard/design/form", name: "designForm", component: blank },
   { path: "/dashboard/reporting", name: "reporting", component: blank },
   { path: "/dashboard/reactor-monitoring", name: "reactorMonitoring", component: blank },
+  { path: "/dashboard/alarms", name: "alarms", component: blank },
   { path: "/dashboard/god-mode", name: "godMode", component: blank },
 ];
 
