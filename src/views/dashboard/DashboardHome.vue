@@ -94,7 +94,7 @@
                 </span>
                 <span class="text-surface-500 dark:text-surface-400 leading-tight">·</span>
                 <span class="text-surface-500 dark:text-surface-400 text-sm leading-tight">
-                  {{ timeAgo(report.occurred_at) }}
+                  {{ formatTimeAgo(report.occurred_at) }}
                 </span>
               </div>
               <span class="text-surface-700 dark:text-surface-200 text-sm">
@@ -128,7 +128,7 @@ import { useIncidentReportsStore } from "@/stores/incidentReports";
 import { useIncidentTypeLookup } from "@/composables/useIncidentTypeLookup";
 import { useUserLookup } from "@/composables/useUserLookup";
 import type { IncidentReport } from "@/types/incidentReport";
-import { formatLabel, timeAgo } from "@/utils";
+import { formatLabel, formatTimeAgo } from "@/utils";
 import PageShell from "@/components/layout/PageShell.vue";
 import { GRADIENTS } from "@/utils/gradients";
 import { getEscalationSeverity } from "@/utils/incident";

@@ -3,7 +3,8 @@ import type { Router } from "vue-router";
 import {
   formatLabel,
   capitalizeFirstLetter,
-  timeAgo,
+  formatTimeAgo,
+  formatRelativeTime,
   enumToSelectOptions,
   navigateBack,
 } from "./index";
@@ -109,7 +110,7 @@ describe("navigateBack", () => {
   });
 });
 
-describe("timeAgo", () => {
+describe("formatTimeAgo", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-15T12:00:00Z"));
@@ -120,18 +121,46 @@ describe("timeAgo", () => {
   });
 
   it("returns hours ago for less than 24h", () => {
-    expect(timeAgo("2025-01-15T06:00:00Z")).toBe("6h ago");
+    expect(formatTimeAgo("2025-01-15T06:00:00Z")).toBe("6h ago");
   });
 
   it("returns minimum 1h for very recent times", () => {
-    expect(timeAgo("2025-01-15T11:55:00Z")).toBe("1h ago");
+    expect(formatTimeAgo("2025-01-15T11:55:00Z")).toBe("1h ago");
   });
 
   it("returns days ago for 24h or more", () => {
-    expect(timeAgo("2025-01-12T12:00:00Z")).toBe("3d ago");
+    expect(formatTimeAgo("2025-01-12T12:00:00Z")).toBe("3d ago");
   });
 
   it("returns 1d ago at exactly 24h boundary", () => {
-    expect(timeAgo("2025-01-14T12:00:00Z")).toBe("1d ago");
+    expect(formatTimeAgo("2025-01-14T12:00:00Z")).toBe("1d ago");
+  });
+});
+
+describe("formatRelativeTime", () => {
+  const now = new Date("2025-01-15T12:00:00Z");
+
+  it("returns 'just now' for less than 5 seconds", () => {
+    expect(formatRelativeTime("2025-01-15T11:59:57Z", now)).toBe("just now");
+  });
+
+  it("returns seconds ago", () => {
+    expect(formatRelativeTime("2025-01-15T11:59:30Z", now)).toBe("30s ago");
+  });
+
+  it("returns minutes ago", () => {
+    expect(formatRelativeTime("2025-01-15T11:55:00Z", now)).toBe("5m ago");
+  });
+
+  it("returns hours ago", () => {
+    expect(formatRelativeTime("2025-01-15T09:00:00Z", now)).toBe("3h ago");
+  });
+
+  it("returns days ago", () => {
+    expect(formatRelativeTime("2025-01-13T12:00:00Z", now)).toBe("2d ago");
+  });
+
+  it("clamps future timestamps to 'just now'", () => {
+    expect(formatRelativeTime("2025-01-15T12:00:30Z", now)).toBe("just now");
   });
 });

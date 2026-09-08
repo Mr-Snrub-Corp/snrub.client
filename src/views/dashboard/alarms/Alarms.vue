@@ -78,7 +78,7 @@
             :data-testid="tile.tsTestId"
             class="text-xs font-mono text-surface-500 dark:text-surface-400"
           >
-            {{ alarms[tile.metric] ? relativeTs(alarms[tile.metric]!.ts) : "" }}
+            {{ alarms[tile.metric] ? formatRelativeTime(alarms[tile.metric]!.ts, now) : "" }}
           </span>
           <Button
             v-if="canAck(tile.metric)"
@@ -104,7 +104,7 @@ import ProgressSpinner from "primevue/progressspinner";
 import Tag from "primevue/tag";
 import PageShell from "@/components/layout/PageShell.vue";
 import { useAlarmsMqtt } from "@/composables/useAlarmsMqtt";
-import { formatLabel } from "@/utils";
+import { formatLabel, formatRelativeTime } from "@/utils";
 import { getReactorStatusSeverity } from "@/utils/reactor";
 import type { AlarmMetric } from "@/types/alarm";
 
@@ -212,17 +212,6 @@ function statusLabel(metric: AlarmMetric): string {
 
 function formatValue(value: number, digits: number): string {
   return value.toFixed(digits);
-}
-
-function relativeTs(iso: string): string {
-  const secs = Math.max(0, Math.floor((now.value.getTime() - new Date(iso).getTime()) / 1000));
-  if (secs < 5) return "just now";
-  if (secs < 60) return `${secs}s ago`;
-  const mins = Math.floor(secs / 60);
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
 }
 
 function tileFaceClass(metric: AlarmMetric): string {
