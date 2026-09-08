@@ -34,6 +34,8 @@ export default defineConfigWithVueTs(
     rules: {
       // CLAUDE.md forbids `any`; ratcheted to warn while existing usages are cleared.
       '@typescript-eslint/no-explicit-any': 'warn',
+      // Require braces on all control statements; forbids single-line `if (x) return;`.
+      curly: ['error', 'all'],
     },
   },
 

@@ -70,6 +70,7 @@ Adjacent `shared/` folder (sibling to this repo) contains an `openapi.json` expo
 - Use npm for package management
 - Prettier for formatting
 - Never use type `any`
+- Always brace control statements; no single-line `if (x) return;` (enforced by ESLint `curly`)
 - After every edit, before finishing: format + lint touched files, run relevant tests, then `npm run build`
 - Do not hide Vitest `expect()` in helpers (`vitest/expect-expect` fails in CI)
 

@@ -4,13 +4,17 @@ import { UUID_RE } from "@/constants/validation";
 const segmentPrefix: Record<string, string> = { reports: "RPT" };
 
 export function formatBreadcrumbSegment(seg: string, prevSeg?: string): string {
-  if (!UUID_RE.test(seg)) return capitalizeFirstLetter(seg);
+  if (!UUID_RE.test(seg)) {
+    return capitalizeFirstLetter(seg);
+  }
   const prefix = prevSeg && segmentPrefix[prevSeg];
   return prefix ? `${prefix}-${seg.slice(0, 8)}` : seg.slice(0, 8);
 }
 
 export function formatLabel(str: string) {
-  if (!str) return "";
+  if (!str) {
+    return "";
+  }
   // replace any _ with space
   const spaced = str.replace(/_/g, " ");
   const words = spaced.split(" ");
@@ -32,7 +36,9 @@ export function enumToSelectOptions<T extends string>(
 }
 
 export function capitalizeFirstLetter(str: string) {
-  if (!str) return "";
+  if (!str) {
+    return "";
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -68,11 +74,19 @@ export function formatTimeAgo(dateString: string): string {
 
 export function formatRelativeTime(iso: string, now: Date): string {
   const secs = Math.max(0, Math.floor((now.getTime() - new Date(iso).getTime()) / 1000));
-  if (secs < 5) return "just now";
-  if (secs < 60) return `${secs}s ago`;
+  if (secs < 5) {
+    return "just now";
+  }
+  if (secs < 60) {
+    return `${secs}s ago`;
+  }
   const mins = Math.floor(secs / 60);
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) {
+    return `${mins}m ago`;
+  }
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
   return `${Math.floor(hours / 24)}d ago`;
 }

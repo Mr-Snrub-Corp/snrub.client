@@ -205,7 +205,9 @@ function canAck(metric: AlarmMetric): boolean {
 
 function statusLabel(metric: AlarmMetric): string {
   const alarm = alarms[metric];
-  if (!alarm) return "";
+  if (!alarm) {
+    return "";
+  }
   const base = formatLabel(alarm.level);
   return isAcked(metric) ? `${base} · acked` : base;
 }

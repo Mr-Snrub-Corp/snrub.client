@@ -62,7 +62,9 @@ const usersStore = useUsersStore();
 
 const userPhoto = computed(() => {
   const uid = authStore.user?.uid;
-  if (!uid) return undefined;
+  if (!uid) {
+    return undefined;
+  }
   return usersStore.getUserById(uid)?.photo;
 });
 
@@ -70,12 +72,16 @@ const home = { icon: "pi pi-home", route: "/dashboard" };
 
 const breadcrumbItems = computed(() => {
   const path = route.path.replace(/^\/dashboard\/?/, "");
-  if (!path) return [];
+  if (!path) {
+    return [];
+  }
   const segments = path.split("/").filter(Boolean);
   return segments.map((seg, i) => {
     const label = formatBreadcrumbSegment(seg, segments[i - 1]);
     const isLast = i === segments.length - 1;
-    if (isLast) return { label };
+    if (isLast) {
+      return { label };
+    }
     const route = "/dashboard/" + segments.slice(0, i + 1).join("/");
     return { label, route };
   });

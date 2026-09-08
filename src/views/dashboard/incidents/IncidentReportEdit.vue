@@ -227,7 +227,9 @@ function initFormData() {
 // Submit
 async function handleSubmit() {
   const isValid = await v$.value.$validate();
-  if (!isValid) return;
+  if (!isValid) {
+    return;
+  }
 
   try {
     await incidentReportsStore.updateIncidentReport(uid, {

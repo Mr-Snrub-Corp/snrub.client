@@ -31,7 +31,9 @@ export function useIncidentReportSubjects(
   }
 
   function addSubject() {
-    if (!newSubject.value.user_id || !newSubject.value.role) return;
+    if (!newSubject.value.user_id || !newSubject.value.role) {
+      return;
+    }
     formData.value.subjects.push({
       user_id: newSubject.value.user_id,
       role: newSubject.value.role as SubjectRole,

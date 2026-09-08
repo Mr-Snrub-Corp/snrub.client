@@ -232,7 +232,9 @@ function initFormData() {
 
 async function onPhotoSelect(event: FileUploadSelectEvent) {
   const file = event.files[0];
-  if (!file) return;
+  if (!file) {
+    return;
+  }
 
   try {
     isUploadingImage.value = true;
@@ -263,7 +265,9 @@ async function onPhotoSelect(event: FileUploadSelectEvent) {
 
 async function handleSubmit() {
   const isValid = await v$.value.$validate();
-  if (!isValid) return;
+  if (!isValid) {
+    return;
+  }
 
   try {
     const updateData = {

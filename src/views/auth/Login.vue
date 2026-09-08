@@ -134,7 +134,9 @@ const v$ = useVuelidate(rules, formData);
 
 async function handleLogin() {
   const isValid = await v$.value.$validate();
-  if (!isValid) return;
+  if (!isValid) {
+    return;
+  }
 
   errorMessage.value = "";
 

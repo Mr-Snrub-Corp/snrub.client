@@ -23,7 +23,9 @@ export function useAlarmsMqtt() {
   let intentionalClose = false;
 
   function handleMessage(topic: string, payload: { toString(): string }): void {
-    if (isAlarmAckTopic(topic)) return;
+    if (isAlarmAckTopic(topic)) {
+      return;
+    }
 
     let parsed: unknown;
     try {
@@ -33,7 +35,9 @@ export function useAlarmsMqtt() {
     }
 
     const data = parseAlarmPayload(parsed);
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
     const prevAck = ackedLevel[data.metric];
     if (prevAck !== undefined && prevAck !== data.level) {
@@ -47,8 +51,12 @@ export function useAlarmsMqtt() {
 
   function ack(metric: AlarmMetric): void {
     const current = alarms[metric];
-    if (!current || current.level === "normal") return;
-    if (ackedLevel[metric] === current.level) return;
+    if (!current || current.level === "normal") {
+      return;
+    }
+    if (ackedLevel[metric] === current.level) {
+      return;
+    }
 
     const body = {
       metric,
@@ -60,7 +68,9 @@ export function useAlarmsMqtt() {
   }
 
   function connect(): void {
-    if (intentionalClose) return;
+    if (intentionalClose) {
+      return;
+    }
 
     const mqttClient = mqtt.connect(import.meta.env.VITE_MQTT_URL, {
       reconnectPeriod: RECONNECT_MS,
@@ -68,26 +78,38 @@ export function useAlarmsMqtt() {
     client = mqttClient;
 
     mqttClient.on("connect", () => {
-      if (client !== mqttClient) return;
+      if (client !== mqttClient) {
+        return;
+      }
       mqttClient.subscribe(ALARMS_TOPIC, { qos: 0 });
-      if (hasData.value) connectionError.value = null;
+      if (hasData.value) {
+        connectionError.value = null;
+      }
     });
 
     mqttClient.on("message", (topic, payload) => {
-      if (client !== mqttClient) return;
+      if (client !== mqttClient) {
+        return;
+      }
       handleMessage(topic, payload);
     });
 
     mqttClient.on("error", () => {
-      if (client !== mqttClient) return;
+      if (client !== mqttClient) {
+        return;
+      }
       connectionError.value = hasData.value
         ? "Alarms connection error. Reconnecting…"
         : "Unable to connect to alarms.";
     });
 
     mqttClient.on("offline", () => {
-      if (client !== mqttClient) return;
-      if (intentionalClose) return;
+      if (client !== mqttClient) {
+        return;
+      }
+      if (intentionalClose) {
+        return;
+      }
       connectionError.value = hasData.value
         ? "Alarms connection lost. Reconnecting…"
         : "Unable to connect to alarms. Reconnecting…";
@@ -98,7 +120,9 @@ export function useAlarmsMqtt() {
 
   onBeforeUnmount(() => {
     intentionalClose = true;
-    if (client === null) return;
+    if (client === null) {
+      return;
+    }
     const old = client;
     client = null;
     old.removeAllListeners();

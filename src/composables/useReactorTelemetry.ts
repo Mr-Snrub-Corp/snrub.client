@@ -40,7 +40,9 @@ export function useReactorTelemetry() {
 
   function pushBuffer(buf: Ref<number[]>, value: number): void {
     buf.value.push(value);
-    if (buf.value.length > MAX_POINTS) buf.value.shift();
+    if (buf.value.length > MAX_POINTS) {
+      buf.value.shift();
+    }
   }
 
   function applyTelemetry(data: ReactorTelemetry): void {
@@ -50,7 +52,9 @@ export function useReactorTelemetry() {
 
     const label = new Date().toLocaleTimeString("en-AU", { hour12: false });
     labels.value.push(label);
-    if (labels.value.length > MAX_POINTS) labels.value.shift();
+    if (labels.value.length > MAX_POINTS) {
+      labels.value.shift();
+    }
 
     pushBuffer(reactorPowerBuffer, data.reactor_power);
     pushBuffer(coreTemperatureBuffer, data.core_temperature);
@@ -73,7 +77,9 @@ export function useReactorTelemetry() {
     }
 
     const data = parseReactorTelemetry(parsed);
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
     applyTelemetry(data);
   }
@@ -84,7 +90,9 @@ export function useReactorTelemetry() {
    * (i.e. component unmounting).
    */
   function scheduleReconnect(): void {
-    if (intentionalClose) return;
+    if (intentionalClose) {
+      return;
+    }
 
     const delay = Math.min(BASE_RECONNECT_MS * 2 ** reconnectAttempt, MAX_RECONNECT_MS);
     reconnectAttempt += 1;
@@ -92,12 +100,16 @@ export function useReactorTelemetry() {
       ? "Telemetry connection lost. Reconnecting…"
       : "Unable to connect to telemetry. Reconnecting…";
 
-    if (reconnectTimer !== null) clearTimeout(reconnectTimer);
+    if (reconnectTimer !== null) {
+      clearTimeout(reconnectTimer);
+    }
     reconnectTimer = setTimeout(connectWebSocket, delay);
   }
 
   function connectWebSocket(): void {
-    if (intentionalClose) return;
+    if (intentionalClose) {
+      return;
+    }
 
     if (reconnectTimer !== null) {
       clearTimeout(reconnectTimer);
@@ -132,22 +144,30 @@ export function useReactorTelemetry() {
 
     socket.onopen = () => {
       reconnectAttempt = 0;
-      if (hasData.value) connectionError.value = null;
+      if (hasData.value) {
+        connectionError.value = null;
+      }
     };
 
     socket.onmessage = handleMessage;
 
     socket.onerror = () => {
-      if (ws !== socket) return;
+      if (ws !== socket) {
+        return;
+      }
       connectionError.value = hasData.value
         ? "Telemetry connection error. Reconnecting…"
         : "Unable to connect to telemetry.";
     };
 
     socket.onclose = () => {
-      if (ws !== socket) return;
+      if (ws !== socket) {
+        return;
+      }
       ws = null;
-      if (intentionalClose) return;
+      if (intentionalClose) {
+        return;
+      }
       scheduleReconnect();
     };
   }
@@ -156,7 +176,9 @@ export function useReactorTelemetry() {
 
   onBeforeUnmount(() => {
     intentionalClose = true;
-    if (reconnectTimer !== null) clearTimeout(reconnectTimer);
+    if (reconnectTimer !== null) {
+      clearTimeout(reconnectTimer);
+    }
     ws?.close();
   });
 
